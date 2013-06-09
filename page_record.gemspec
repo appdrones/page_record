@@ -22,6 +22,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
 
-  spec.add_dependency "capybara" , '~>2.0.0'
+  spec.add_dependency "capybara" , '~>2.1.0'
   spec.add_dependency "activesupport"
 end
