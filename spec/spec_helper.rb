@@ -7,6 +7,8 @@
 require 'page_record'
 require 'capybara'
 require_relative './team'
+require_relative './shared_contexts'
+require_relative './shared_examples'
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true

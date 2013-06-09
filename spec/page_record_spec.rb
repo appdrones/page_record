@@ -1,46 +1,25 @@
 require_relative  './spec_helper'
 
 
+
 describe PageRecord::PageRecord do
+
+	include_context "page with single table with 3 records" # Default context
 
 	before do
 	  class TeamRecord < PageRecord::PageRecord; end
-		TeamRecord.page = single_table
+		TeamRecord.page = page
 	end
 
-
-  let :single_table do
-    Capybara.string <<-STRING
-    	<table>
-    		<tr data-team-id='1'>
-    			<td data-attribute-for='ranking'>1</td>
-    			<td data-attribute-for='name'>Ajax</td>
-    			<td data-attribute-for='points'>10</td>
-  			</tr>
-    		<tr data-team-id='2'>
-    			<td data-attribute-for='ranking'>2</td>
-    			<td data-attribute-for='name'>PSV</td>
-    			<td data-attribute-for='points'>8</td>
-  			</tr>
-    		<tr data-team-id='3'>
-    			<td data-attribute-for='ranking'>3</td>
-    			<td data-attribute-for='name'>Feijenoord</td>
-    			<td data-attribute-for='points'>6</td>
-  			</tr>
-			</table>
-      STRING
-  end
-
   describe ".page=" do
-
   	before do
   		TeamRecord.page = nil # reset for the spec
   	end
 
-  	subject {TeamRecord.page = single_table }
+  	subject {TeamRecord.page = page }
 
   	it "sets the page" do
-			expect{subject}.to change{TeamRecord.page}.from(nil).to(single_table)  		
+			expect{subject}.to change{TeamRecord.page}.from(nil).to(page)  		
   	end
   end
 
@@ -49,47 +28,53 @@ describe PageRecord::PageRecord do
   	subject {TeamRecord.page}
 
   	it "gets the page" do
-			expect(subject).to eq single_table  		
+			expect(subject).to eq page  		
   	end
   end
 
 
 	describe ".all" do
-		subject {TeamRecord.all }
 
-		context "Page contains records" do
 
-			it "returns an Array" do
-				expect(subject.class).to eq Array
-			end
+		subject {TeamRecord.all( selector) }
 
-			it "returns the inheriting class in the Array" do
-				subject.each do |record|
-					expect( record.class).to eq TeamRecord
-				end
-			end
+		context "one set of records available on the page" do
+			let(:selector)	{""}
 
-			it "returns an element for each record on the page" do
-				expect( subject.count).to eq 3
+			it_behaves_like "valid call of .all"
+
+		end
+
+		context "No records available on the page" do
+
+			include_context "page without records"
+			let(:selector)	{""}
+
+			it "returns an empty Array" do
+				expect(subject).to eq []
 			end
 
 		end
 
-		context "Page contains no records" do
+		context "multiple sets of records avialable on the page" do
+			include_context "page with two tables with 3 records" 
 
-			before do
-				TeamRecord.page = empty_table
+			context "without selector" do
+				let(:selector)	{""}
+
+				it "raises error PageRecord::MultipleRecords" do
+					expect{subject}.to raise_error(PageRecord::MultipleRecords)
+				end
+
 			end
 
-		  let :empty_table do
-	  	  Capybara.string <<-STRING
-	    	<table>
-	    	</table
-	    	STRING
-	    end
+			it_behaves_like "handles invalid selectors"
 
-			it "returns an empty Array" do
-				expect(subject).to eq []
+			context "with a correct selector" do
+
+				let(:selector)	{"#first-table"}
+				it_behaves_like "valid call of .all"
+
 			end
 
 		end
@@ -118,35 +103,21 @@ describe PageRecord::PageRecord do
 
 	describe ".find" do
 
-		subject {TeamRecord.find(record_number) }
+		subject {TeamRecord.find(record_number, selector) }
+		let(:selector) { ""}
 
 		context "one found on the page" do
+
 			let(:record_number) { 1}
 
-			it "returns the inheriting class" do
-				expect(subject.class).to eq TeamRecord
-			end
-
-			it "returns the record identified by the id" do
-				expect(subject.id).to eq 1
-			end
+			it_behaves_like "a valid call of .find"
 
 		end
 
 		context "multiple record found on the page" do
 
 			let(:record_number) { 1}
-
-			before do
-				TeamRecord.page = Capybara.string <<-STRING
-		    	<table>
-		    		<tr data-team-id='1'>
-		  			</tr>
-		    		<tr data-team-id='1'>
-		  			</tr>
-					</table>
-		      STRING
-			end
+			include_context "page with duplicate records"
 
 			subject {TeamRecord.find(1) }
 
@@ -167,12 +138,36 @@ describe PageRecord::PageRecord do
 
 		end
 
+		context "multiple sets of records avialable on the page" do
+			include_context "page with two tables with 3 records" 
+			let(:record_number) {1}
+
+			context "without selector" do
+				let(:selector)	{""}
+
+				it "raises error PageRecord::MultipleRecords" do
+					expect{subject}.to raise_error(PageRecord::MultipleRecords)
+				end
+
+			end
+
+			it_behaves_like "handles invalid selectors"
+
+			context "with a correct selector" do
+
+				let(:selector)	{"#first-table"}
+				it_behaves_like "a valid call of .find"
+
+			end
+
+		end
 
 	end	
 
 	describe "find_by..." do
 
-		subject { TeamRecord.find_by_name(name)}
+		subject { TeamRecord.find_by_name(name, selector)}
+		let(:selector) { ""}
 
 		context "no record on page" do
 			let(:name) {"unknown name"}
@@ -185,19 +180,7 @@ describe PageRecord::PageRecord do
 
 		context "multiple records on page" do
 			let(:name) {"Ajax"}
-
-			before do
-				TeamRecord.page = Capybara.string <<-STRING
-		    	<table>
-		    		<tr data-team-id='1'>
-		    			<td data-attribute-for='name'>Ajax</td>
-		  			</tr>
-		    		<tr data-team-id='1'>
-		    			<td data-attribute-for='name'>Ajax</td>
-		  			</tr>
-					</table>
-		      STRING
-			end
+			include_context "page with duplicate records"
 
 			it "raises error PageRecord::MultipleRecords" do
 				expect{subject}.to raise_error(PageRecord::MultipleRecords)
@@ -208,15 +191,35 @@ describe PageRecord::PageRecord do
 		context "one record on page" do
 			let(:name) {"Ajax"}
 
-			it "returns the inheriting class" do
-				expect(subject.class).to eq TeamRecord
+			it_behaves_like "a valid call of .find"
+
+		end
+
+		context "multiple sets of records avialable on the page" do
+			include_context "page with two tables with 3 records" 
+			let(:name) {"Ajax"}
+
+			context "without selector" do
+				let(:selector)	{""}
+
+				it "raises error PageRecord::MultipleRecords" do
+					expect{subject}.to raise_error(PageRecord::MultipleRecords)
+				end
+
 			end
 
-			it "returns the record identified by the attribute" do
-				expect(subject.id).to eq '1'
+			it_behaves_like "handles invalid selectors"
+
+			context "with a correct selector" do
+
+				let(:selector)	{"#first-table"}
+				let(:name) {"Ajax"}
+				it_behaves_like "a valid call of .find"
+
 			end
 
 		end
+
 
 
 	end
@@ -244,6 +247,7 @@ describe PageRecord::PageRecord do
 	describe "#... valid attribute getter" do
 
 		subject {TeamRecord.find(1)}
+  	include_context "page with single table with 3 records"
 
 		context "attribute is on page" do
 
