@@ -55,9 +55,9 @@ describe PageRecord::PageRecord do
 
 
 	describe ".all" do
+		subject {TeamRecord.all }
 
 		context "Page contains records" do
-			subject {TeamRecord.all }
 
 			it "returns an Array" do
 				expect(subject.class).to eq Array
@@ -74,6 +74,26 @@ describe PageRecord::PageRecord do
 			end
 
 		end
+
+		context "Page contains no records" do
+
+			before do
+				TeamRecord.page = empty_table
+			end
+
+		  let :empty_table do
+	  	  Capybara.string <<-STRING
+	    	<table>
+	    	</table
+	    	STRING
+	    end
+
+			it "returns an empty Array" do
+				expect(subject).to eq []
+			end
+
+		end
+
 	end	
 
 
