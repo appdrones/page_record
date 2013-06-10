@@ -23,6 +23,18 @@ module PageRecord
 			end
 		end
 
+		def method_missing(action)
+			begin
+				element = @record.find("[data-action-for='#{action}']")
+				debuggertspec_
+				element.native.click
+			rescue Capybara::ElementNotFound
+				super
+			end
+
+		end
+
+
 	private
 
 		def read_attribute_raw(attribute)

@@ -98,6 +98,7 @@ shared_context "page one record in a form" do
     Capybara.string <<-STRING
     <form data-team-id='1'>
         <input data-attribute-for='name'>
+        <button data-action-for='create'>
     </form>
       STRING
   end

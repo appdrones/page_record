@@ -316,6 +316,32 @@ describe PageRecord::PageRecord do
 
 	end
 
+	describe "#... action methods" do
+
+		let(:record) { TeamPage.find(1)}
+  	include_context "page one record in a form"
+
+		context "action exists on page" do
+			subject {record.create}
+
+			it "clicks on the specified action element" do
+				pending "waits for testing to go to real pages"
+			end
+
+
+		end
+
+		context "action doesn't exist on page" do
+			subject {record.unkown}
+
+			it "raises error NoMethodError" do
+				expect{subject}.to raise_error(NoMethodError)
+			end
+		end
+
+
+	end
+
 
 
 end
