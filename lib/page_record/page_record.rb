@@ -39,6 +39,13 @@ module PageRecord
 			textelement?(tag) ? element.value : element.text
 		end
 
+		def write_attribute( attribute, value)
+			element = self.send("#{attribute}_raw")
+			tag = element.tag_name
+			raise NotInputField unless textelement?(tag)
+			element.native['value'] = value			
+		end
+
 
 		def textelement?(tag)
 			case tag

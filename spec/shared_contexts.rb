@@ -93,3 +93,23 @@ shared_context "page with duplicate records" do
   end
 end
 
+shared_context "page one record in a form" do
+  let :page do
+    Capybara.string <<-STRING
+    <form data-team-id='1'>
+        <input data-attribute-for='name'>
+    </form>
+      STRING
+  end
+end
+
+
+shared_context "page one record" do
+  let :page do
+    Capybara.string <<-STRING
+    <div data-team-id='1'>
+        <div data-attribute-for='name'></div>
+    </div>
+      STRING
+  end
+end

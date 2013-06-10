@@ -291,4 +291,31 @@ describe PageRecord::PageRecord do
 
 	end
 
+	describe "#... valid attribute setter" do
+
+		subject {record.name = 'FC Utrecht'}
+		let(:record) { TeamPage.find(1)}
+
+
+		context "attribute is an input field" do
+	  	include_context "page one record in a form"
+
+			it "sets the attribute to specified value" do
+				expect{subject}.to change{record.name}.from(nil).to('FC Utrecht')
+			end
+		end
+
+		context "attribute is an input field" do
+	  	include_context "page one record"
+
+			it "raises error PageRecord::NotInputField" do
+				expect{subject}.to raise_error(PageRecord::NotInputField)
+			end
+
+		end
+
+	end
+
+
+
 end

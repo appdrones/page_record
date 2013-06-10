@@ -39,7 +39,7 @@ shared_examples "handles invalid selectors" do
 	context "with an non existing selector" do
 
 		let(:selector)	{"#non-existing-table"}
-		let(:filter)	{""}
+		let(:filter)		{""}
 
 
 		it "raises error PageRecord::RecordNotFound" do

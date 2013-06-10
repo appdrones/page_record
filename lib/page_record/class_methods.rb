@@ -39,21 +39,17 @@ module PageRecord
 		end
 
 private
-		def self.define_raw_methods(base, attributes)
-			base.instance_eval do
-				attributes.each do | attribute |
-					define_method(attribute) do
-						read_attribute(attribute)
-					end
-				end
-			end
-		end
-
 		def self.define_accessor_methods(base, attributes)
 			base.instance_eval do
 				attributes.each do | attribute |
 					define_method("#{attribute}_raw") do
 						read_attribute_raw(attribute)
+					end
+					define_method(attribute) do
+						read_attribute(attribute)
+					end
+					define_method("#{attribute}=") do | value|
+						write_attribute(attribute, value)
 					end
 				end
 			end
@@ -63,7 +59,6 @@ private
 		def self.define_instance_methods(base)
 			base.type = @base_name.downcase
 			attributes = @attributes	
-			define_raw_methods(base, attributes)
 			define_accessor_methods(base, attributes)		
 		end
 
