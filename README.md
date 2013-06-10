@@ -1,8 +1,5 @@
-[![Code Climate](https://codeclimate.com/github/appdrones/page_record.png)](https://codeclimate.com/github/appdrones/page_record)
+[![Code Climate](https://codeclimate.com/github/appdrones/page_record.png)](https://codeclimate.com/github/appdrones/page_record) [![Build Status](https://travis-ci.org/appdrones/page_record.png)](https://travis-ci.org/appdrones/page_record) [![Dependency Status](https://gemnasium.com/appdrones/page_record.png)](https://gemnasium.com/appdrones/page_record) [![Coverage Status](https://coveralls.io/repos/appdrones/page_record/badge.png)](https://coveralls.io/r/appdrones/page_record)
 
-[![Build Status](https://travis-ci.org/appdrones/page_record.png)](https://travis-ci.org/appdrones/page_record)
-
-[![Dependency Status](https://gemnasium.com/appdrones/page_record.png)](https://gemnasium.com/appdrones/page_record)
 # PageRecord
 
 You've probably been there. You're building your killer Web Application. You, being a responsible developer, your code is thoroughly tested. You are using the likes of cucumber and Rspec to do so. Besides your unit-tests, you also have integration tests doing a full stack test. You are using Capybara to read, parse and test the rendered pages. You use all kinds of selectors to select different parts of the page. Slowly but surely your test code becomes less and less readable.
