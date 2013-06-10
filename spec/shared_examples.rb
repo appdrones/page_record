@@ -6,7 +6,7 @@ shared_examples "valid call of .all" do
 
 	it "returns the inheriting class in the Array" do
 		subject.each do |record|
-			expect( record.class).to eq TeamRecord
+			expect( record.class).to eq TeamPage
 		end
 	end
 
@@ -39,7 +39,7 @@ end
 
 shared_examples "a valid call of .find" do
 	it "returns the inheriting class" do
-		expect(subject.class).to eq TeamRecord
+		expect(subject.class).to eq TeamPage
 	end
 
 	it "returns the record identified by the id" do

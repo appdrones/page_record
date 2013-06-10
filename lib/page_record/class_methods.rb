@@ -30,7 +30,7 @@ module PageRecord
 
 
 		def self.inherited(base)
-			@base_name =  base.to_s.gsub('Record', '')
+			@base_name =  base.to_s.gsub('Page', '')
 			@host_class = @base_name.constantize
 			@attributes = @host_class.attribute_names
 			@attributes.delete('id') # id is a special case attribute

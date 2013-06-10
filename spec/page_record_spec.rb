@@ -7,25 +7,25 @@ describe PageRecord::PageRecord do
 	include_context "page with single table with 3 records" # Default context
 
 	before do
-	  class TeamRecord < PageRecord::PageRecord; end
-		TeamRecord.page = page
+	  class TeamPage < PageRecord::PageRecord; end
+		TeamPage.page = page
 	end
 
   describe ".page=" do
   	before do
-  		TeamRecord.page = nil # reset for the spec
+  		TeamPage.page = nil # reset for the spec
   	end
 
-  	subject {TeamRecord.page = page }
+  	subject {TeamPage.page = page }
 
   	it "sets the page" do
-			expect{subject}.to change{TeamRecord.page}.from(nil).to(page)  		
+			expect{subject}.to change{TeamPage.page}.from(nil).to(page)  		
   	end
   end
 
   describe ".page" do
 
-  	subject {TeamRecord.page}
+  	subject {TeamPage.page}
 
   	it "gets the page" do
 			expect(subject).to eq page  		
@@ -36,7 +36,7 @@ describe PageRecord::PageRecord do
 	describe ".all" do
 
 
-		subject {TeamRecord.all( selector) }
+		subject {TeamPage.all( selector) }
 
 		context "one set of records available on the page" do
 			let(:selector)	{""}
@@ -84,7 +84,7 @@ describe PageRecord::PageRecord do
 
 	describe "inherited class" do
 
-		subject {TeamRecord.new(1) }
+		subject {TeamPage.new(1) }
 
 			it "responds to all attributes of corresponding AR Class" do
 				Team.attribute_names.each do |attribute|
@@ -103,7 +103,7 @@ describe PageRecord::PageRecord do
 
 	describe ".find" do
 
-		subject {TeamRecord.find(record_number, selector) }
+		subject {TeamPage.find(record_number, selector) }
 		let(:selector) { ""}
 
 		context "one found on the page" do
@@ -119,7 +119,7 @@ describe PageRecord::PageRecord do
 			let(:record_number) { 1}
 			include_context "page with duplicate records"
 
-			subject {TeamRecord.find(1) }
+			subject {TeamPage.find(1) }
 
 			it "raises error PageRecord::MultipleRecords" do
 				expect{subject}.to raise_error(PageRecord::MultipleRecords)
@@ -166,7 +166,7 @@ describe PageRecord::PageRecord do
 
 	describe "find_by..." do
 
-		subject { TeamRecord.find_by_name(name, selector)}
+		subject { TeamPage.find_by_name(name, selector)}
 		let(:selector) { ""}
 
 		context "no record on page" do
@@ -226,7 +226,7 @@ describe PageRecord::PageRecord do
 
 	describe "#..._raw " do
 
-		subject {TeamRecord.find(1)}
+		subject {TeamPage.find(1)}
 
 		context "attribute is on page" do
 
@@ -246,7 +246,7 @@ describe PageRecord::PageRecord do
 
 	describe "#... valid attribute getter" do
 
-		subject {TeamRecord.find(1)}
+		subject {TeamPage.find(1)}
   	include_context "page with single table with 3 records"
 
 		context "attribute is on page" do
