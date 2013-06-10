@@ -1,7 +1,5 @@
 require_relative  './spec_helper'
 
-
-
 describe PageRecord::PageRecord do
 
 	include_context "page with single table with 3 records" # Default context
@@ -36,12 +34,25 @@ describe PageRecord::PageRecord do
 	describe ".all" do
 
 
-		subject {TeamPage.all( selector) }
+		subject {TeamPage.all( selector, filter) }
 
 		context "one set of records available on the page" do
 			let(:selector)	{""}
+			let(:filter)	{""}
 
 			it_behaves_like "valid call of .all"
+
+			context "with a filter" do
+				let(:filter)	{".champions_league"}
+
+					it "returns only the elements that contain the filter css" do
+						expect( subject.map {|c| c.name}).not_to include('Feijenoord')
+						expect( subject.map {|c| c.name}).to include(*['Ajax', 'PSV'])
+					end
+
+
+			end
+
 
 		end
 
@@ -49,6 +60,8 @@ describe PageRecord::PageRecord do
 
 			include_context "page without records"
 			let(:selector)	{""}
+			let(:filter)	{""}
+
 
 			it "returns an empty Array" do
 				expect(subject).to eq []
@@ -61,6 +74,8 @@ describe PageRecord::PageRecord do
 
 			context "without selector" do
 				let(:selector)	{""}
+				let(:filter)	{""}
+
 
 				it "raises error PageRecord::MultipleRecords" do
 					expect{subject}.to raise_error(PageRecord::MultipleRecords)
@@ -73,6 +88,8 @@ describe PageRecord::PageRecord do
 			context "with a correct selector" do
 
 				let(:selector)	{"#first-table"}
+				let(:filter)	{""}
+
 				it_behaves_like "valid call of .all"
 
 			end
@@ -103,14 +120,19 @@ describe PageRecord::PageRecord do
 
 	describe ".find" do
 
-		subject {TeamPage.find(record_number, selector) }
+		subject {TeamPage.find(record_number, selector, filter) }
 		let(:selector) { ""}
+		let(:filter) {""}
 
 		context "one found on the page" do
 
 			let(:record_number) { 1}
 
 			it_behaves_like "a valid call of .find"
+
+
+			it_behaves_like "it handles filters"
+
 
 		end
 
@@ -138,7 +160,7 @@ describe PageRecord::PageRecord do
 
 		end
 
-		context "multiple sets of records avialable on the page" do
+		context "multiple sets of records available on the page" do
 			include_context "page with two tables with 3 records" 
 			let(:record_number) {1}
 
@@ -166,8 +188,9 @@ describe PageRecord::PageRecord do
 
 	describe "find_by..." do
 
-		subject { TeamPage.find_by_name(name, selector)}
+		subject { TeamPage.find_by_name(name, selector, filter)}
 		let(:selector) { ""}
+		let(:filter) {""}
 
 		context "no record on page" do
 			let(:name) {"unknown name"}
@@ -192,6 +215,7 @@ describe PageRecord::PageRecord do
 			let(:name) {"Ajax"}
 
 			it_behaves_like "a valid call of .find"
+			it_behaves_like "it handles filters"
 
 		end
 

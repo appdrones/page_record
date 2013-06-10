@@ -6,7 +6,7 @@ module PageRecord
 		attr_reader :id
 		alias :id_raw :id
 
-		def initialize(id, selector="")
+		def initialize(id, selector="", filter="")
 			@page = self.class.page
 			# raise PageNotSet, "page variable not set" unless @page
 			@type = self.class.type
@@ -14,7 +14,7 @@ module PageRecord
 			if @id
 				begin
 					context = self.class.context_for_selector(selector)
-					@record = context.find("[data-#{@type}-id='#{@id}']")
+					@record = context.find("[data-#{@type}-id='#{@id}']#{filter}")
 				rescue Capybara::Ambiguous
 					raise MultipleRecords, "Found multiple #{@type} record with id #{@id} on page"				
 				rescue Capybara::ElementNotFound

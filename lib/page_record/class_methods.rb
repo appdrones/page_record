@@ -1,24 +1,24 @@
 module PageRecord
 	class PageRecord
 
-		def self.all(selector = "")
+		def self.all(selector = "", filter = "")
 			records = []
 			context = context_for_selector(selector)				
-			context.all("[data-#{@type}-id]").each do | record|
+			context.all("[data-#{@type}-id]#{filter}").each do | record|
 				id = record["data-#{@type}-id"]
 				records << self.new(id, selector)
 			end
 			records
 		end
 
-		def self.find(id, selector = "")
-			self.new(id, selector)
+		def self.find(id, selector = "", filter= "")
+			self.new(id, selector, filter)
 		end
 
-		def self.find_by_attribute(attribute, value, selector)
+		def self.find_by_attribute(attribute, value, selector, filter)
 			begin
 				context = self.context_for_selector(selector)
-				record = context.find("[data-#{@type}-id] > [data-attribute-for='#{attribute}']:contains('#{value}'):parent")
+				record = context.find("[data-#{@type}-id]#{filter} > [data-attribute-for='#{attribute}']:contains('#{value}'):parent")
 				id = record.native.parent["data-#{@type}-id"]
 				self.new(id, selector)
 				rescue Capybara::Ambiguous
@@ -76,8 +76,8 @@ private
 				attr_accessor :page, :type
 
 				attributes.each do | attribute|
-					define_method "find_by_#{attribute}" do | value, selector = ""|
-						find_by_attribute( attribute, value, selector)
+					define_method "find_by_#{attribute}" do | value, selector = "", filter = ""|
+						find_by_attribute( attribute, value, selector, filter)
 					end
 				end
 			end
