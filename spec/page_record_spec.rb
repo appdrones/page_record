@@ -115,14 +115,27 @@ describe PageRecord::PageRecord do
 				end
 			end
 
+			#
+			# Checks a bug
+			it "leaves attribute_names of host class intact"
+
 
 	end
+
+	describe "action method on class" do
+		pending
+	end
+
 
 	describe ".find" do
 
 		subject {TeamPage.find(record_number, selector, filter) }
 		let(:selector) { ""}
 		let(:filter) {""}
+
+		context "find without an id" do
+			pending
+		end
 
 		context "one found on the page" do
 
@@ -188,7 +201,7 @@ describe PageRecord::PageRecord do
 
 	describe "find_by..." do
 
-		subject { TeamPage.find_by_name(name, selector, filter)}
+		subject { debugger;TeamPage.find_by_name(name, selector, filter)}
 		let(:selector) { ""}
 		let(:filter) {""}
 
@@ -301,6 +314,7 @@ describe PageRecord::PageRecord do
 	  	include_context "page one record in a form"
 
 			it "sets the attribute to specified value" do
+				pending
 				expect{subject}.to change{record.name}.from(nil).to('FC Utrecht')
 			end
 		end
@@ -342,6 +356,13 @@ describe PageRecord::PageRecord do
 
 	end
 
+	describe "#...raw action methods" do
+		pending
+	end
+
+	describe ".attributes" do
+		pending
+	end
 
 
 end
