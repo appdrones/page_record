@@ -9,6 +9,44 @@ describe PageRecord::PageRecord do
 		TeamPage.page = page
 	end
 
+
+  describe ".attributes" do
+  	before do
+		  class TeamPage < PageRecord::PageRecord
+				attributes ['country', 'stadium']
+		  end
+  	end
+
+  	after do
+			Object.send(:remove_const, :TeamPage)
+  	end
+
+  	subject { TeamPage}
+
+  	it "clears all old class methods" do
+			expect(subject).not_to respond_to(:find_by_name)  		
+			expect(subject).not_to respond_to(:find_by_ranking)  		
+  	end
+
+  	it "adds new class methods to class " do
+			expect(subject).to respond_to(:find_by_country)
+			expect(subject).to respond_to(:find_by_stadium)	
+  	end
+
+  	it "clears all old instance methods" do
+			expect(subject.new(1)).not_to respond_to(:name)  		
+			expect(subject.new(1)).not_to respond_to(:ranking)  		
+  	end
+
+  	it "adds new class methods to class " do
+			expect(subject.new(1)).to respond_to(:country)
+			expect(subject.new(1)).to respond_to(:stadium)	
+  	end
+
+  end
+
+
+
   describe ".page=" do
   	before do
   		TeamPage.page = nil # reset for the spec
@@ -201,7 +239,7 @@ describe PageRecord::PageRecord do
 
 	describe "find_by..." do
 
-		subject { debugger;TeamPage.find_by_name(name, selector, filter)}
+		subject { TeamPage.find_by_name(name, selector, filter)}
 		let(:selector) { ""}
 		let(:filter) {""}
 

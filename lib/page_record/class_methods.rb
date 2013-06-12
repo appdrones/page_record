@@ -5,6 +5,13 @@ module PageRecord
 	    attr_accessor :page, :type
 	  end
 
+	  def self.attributes(new_attributes)
+	  	undefine_class_methods(self)
+	  	undefine_instance_methods(self)
+	  	@attributes = new_attributes
+	  	define_class_methods(self)
+	  	define_instance_methods(self)
+	  end
 
 		def self.all(selector = "", filter = "")
 			records = []
@@ -34,20 +41,20 @@ module PageRecord
 			end
 		end
 
-		# def self.method_missing(action)
-		# 	raw_action = /(.*)\?/.match(action)
-		# 	begin
-		# 		if raw_action
-		# 			raw_action_for(raw_action[0])
-		# 		else
-		# 			action_for(action)
-		# 		end
-		# 	rescue Capybara::Ambiguous
-		# 		raise MultipleRecords, "Found multiple #{action} tags for #{@type} on page"				
-		# 	rescue Capybara::ElementNotFound
-		# 		super
-		# 	end
-		# end
+		def self.method_missing(action)
+			raw_action = /(.*)\?/.match(action)
+			begin
+				if raw_action
+					raw_action_for(raw_action[0])
+				else
+					action_for(action)
+				end
+			rescue Capybara::Ambiguous
+				raise MultipleRecords, "Found multiple #{action} tags for #{@type} on page"				
+			rescue Capybara::ElementNotFound
+				super
+			end
+		end
 
 
 		def self.inherited(base)
@@ -92,8 +99,34 @@ private
 		end
 
 
+		def self.undefine_accessor_methods(base)
+			base.instance_eval do
+				@attributes.each do | attribute |
+					remove_method("#{attribute}_raw")
+					remove_method(attribute) 
+					remove_method("#{attribute}=")
+				end
+			end
+		end
+
+		def self.undefine_class_methods(base)
+			eigenclass = class << base; self; end
+			attributes = base.instance_variable_get('@attributes')
+ 			eigenclass.instance_eval do
+				attributes.each do | attribute|
+					remove_method "find_by_#{attribute}"
+				end
+			end
+		end
+
+
+
 		def self.define_instance_methods(base)
 			define_accessor_methods(base)		
+		end
+
+		def self.undefine_instance_methods(base)
+			undefine_accessor_methods(base)		
 		end
 
 
@@ -103,9 +136,18 @@ private
  			eigenclass.instance_eval do
 				attributes.each do | attribute|
 					define_method "find_by_#{attribute}" do | value, selector = "", filter = ""|
-						debugger
 						find_by_attribute( attribute, value, selector, filter)
 					end
+				end
+			end
+		end
+
+		def self.undefine_class_methods(base)
+			eigenclass = class << base; self; end
+			attributes = base.instance_variable_get('@attributes')
+ 			eigenclass.instance_eval do
+				attributes.each do | attribute|
+					remove_method "find_by_#{attribute}"
 				end
 			end
 		end
