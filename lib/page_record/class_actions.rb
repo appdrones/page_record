@@ -5,7 +5,7 @@ module PageRecord
 			raw_action = /(.*)\?/.match(action)
 			begin
 				if raw_action
-					raw_action_for(raw_action[0])
+					action_for?(raw_action[1])
 				else
 					action_for(action)
 				end
@@ -21,12 +21,14 @@ private
 
 
 		def self.action_for(action)
-			element = raw_action_for(action)
-			element.native.click
+			element = action_for?(action)
+			element.click
+			element
 		end
 
-		def self.raw_action_for(action)
-			@page.find("[data-action-for='#{action}']")
+
+		def self.action_for?(action)
+			page.find("[data-action-for='#{action}']")
 		end
 	end
 end
