@@ -158,9 +158,9 @@ describe PageRecord::PageRecord do
 				end
 			end
 
-			it "responds <attribute>_raw of corresponding AR Class" do
+			it "responds <attribute>? of corresponding AR Class" do
 				Team.attribute_names.each do |attribute|
-					expect(subject).to respond_to("#{attribute}_raw")
+					expect(subject).to respond_to("#{attribute}?")
 				end
 			end
 
@@ -310,21 +310,21 @@ describe PageRecord::PageRecord do
 
 	end
 
-	describe "#..._raw " do
+	describe "#...? " do
 
 		subject {TeamPage.find(1)}
 
 		context "attribute is on page" do
 
 			it "returns the dom object" do
-				expect( subject.name_raw.class).to eq Capybara::Node::Simple
+				expect( subject.name?.class).to eq Capybara::Node::Simple
 			end
 		end
 
 		context "attribute not on page" do
 
 			it "raises error PageRecord::AttributeNotFound" do
-				expect{subject.goals_raw}.to raise_error(PageRecord::AttributeNotFound)
+				expect{subject.goals?}.to raise_error(PageRecord::AttributeNotFound)
 			end
 
 		end
@@ -405,7 +405,7 @@ describe PageRecord::PageRecord do
 
 	end
 
-	describe "#...raw action methods" do
+	describe "#...? action methods" do
 		pending
 	end
 

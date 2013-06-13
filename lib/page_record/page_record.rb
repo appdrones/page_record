@@ -4,7 +4,7 @@ module PageRecord
 	class PageRecord
 
 		attr_reader :id
-		alias :id_raw :id
+		alias :id? :id
 
 		def initialize(id="", selector="", filter="")
 			@page = self.class.page

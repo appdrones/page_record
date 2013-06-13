@@ -40,8 +40,8 @@ private
 		def self.define_accessor_methods(base)
 			base.instance_eval do
 				@attributes.each do | attribute |
-					define_method("#{attribute}_raw") do
-						read_attribute_raw(attribute)
+					define_method("#{attribute}?") do
+						read_attribute?(attribute)
 					end
 					define_method(attribute) do
 						read_attribute(attribute)
@@ -57,7 +57,7 @@ private
 		def self.undefine_accessor_methods(base)
 			base.instance_eval do
 				@attributes.each do | attribute |
-					remove_method("#{attribute}_raw")
+					remove_method("#{attribute}?")
 					remove_method(attribute) 
 					remove_method("#{attribute}=")
 				end

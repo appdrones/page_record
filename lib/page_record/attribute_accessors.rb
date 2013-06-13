@@ -1,6 +1,6 @@
 module PageRecord
 	class PageRecord
-		def read_attribute_raw(attribute)
+		def read_attribute?(attribute)
 			begin
 				@record.find("[data-attribute-for='#{attribute}']")
 			rescue Capybara::ElementNotFound
@@ -9,13 +9,13 @@ module PageRecord
 		end
 
 		def read_attribute( attribute)
-			element = self.send("#{attribute}_raw")
+			element = self.send("#{attribute}?")
 			tag = element.tag_name
 			textelement?(tag) ? element.value : element.text
 		end
 
 		def write_attribute( attribute, value)
-			element = self.send("#{attribute}_raw")
+			element = self.send("#{attribute}?")
 			tag = element.tag_name
 			raise NotInputField unless textelement?(tag)
 			element.set(value)
