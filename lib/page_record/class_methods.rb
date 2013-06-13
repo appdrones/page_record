@@ -1,71 +1,6 @@
 module PageRecord
 	class PageRecord
 
-	  class << self
-	    attr_accessor :type
-	  end
-
-	  def self.page=(new_page)
-	  	@@page = new_page
-	  end
-
-	  def self.page
-	  	@@page
-	  end
-
-
-	  def self.attributes(new_attributes)
-	  	undefine_class_methods(self)
-	  	undefine_instance_methods(self)
-	  	@attributes = new_attributes
-	  	define_class_methods(self)
-	  	define_instance_methods(self)
-	  end
-
-		def self.all(selector = "", filter = "")
-			records = []
-			context = context_for_selector(selector)				
-			context.all("[data-#{@type}-id]#{filter}").each do | record|
-				id = record["data-#{@type}-id"]
-				records << self.new(id, selector)
-			end
-			records
-		end
-
-		def self.find(id="", selector = "", filter= "")
-			self.new(id, selector, filter)
-		end
-
-		def self.find_by_attribute(attribute, value, selector, filter)
-			begin
-				context = self.context_for_selector(selector)
-				record = context.find("[data-#{@type}-id]#{filter} > [data-attribute-for='#{attribute}']", :text => value)
-				parent = record.find(:xpath, "..")
-				id = parent["data-#{@type}-id"]
-				self.new(id, selector)
-				rescue Capybara::Ambiguous
-					raise MultipleRecords, "Found multiple #{@type} record with #{attribute} #{value} on page"				
-				rescue Capybara::ElementNotFound
-					raise RecordNotFound, "#{@type} record with #{attribute} #{value} not found on page"
-			end
-		end
-
-		def self.method_missing(action)
-			raw_action = /(.*)\?/.match(action)
-			begin
-				if raw_action
-					raw_action_for(raw_action[0])
-				else
-					action_for(action)
-				end
-			rescue Capybara::Ambiguous
-				raise MultipleRecords, "Found multiple #{action} tags for #{@type} on page"				
-			rescue Capybara::ElementNotFound
-				super
-			end
-		end
-
-
 		def self.inherited(base)
 			base.class_eval do
 				@base_name =  base.to_s.gsub('Page', '')
@@ -78,17 +13,28 @@ module PageRecord
 			define_instance_methods(base)
 		end
 
+	  class << self
+	    attr_accessor :type
+	  end
+
+	  def self.page=(new_page)
+	  	@@page = new_page
+	  end
+
+	  def self.page
+	  	@@page
+	  end
+
+	  def self.attributes(new_attributes)
+	  	undefine_class_methods(self)
+	  	undefine_instance_methods(self)
+	  	@attributes = new_attributes
+	  	define_class_methods(self)
+	  	define_instance_methods(self)
+	  end
+
+
 private
-
-
-		def self.action_for(action)
-			element = raw_action_for(action)
-			element.native.click
-		end
-
-		def self.raw_action_for(action)
-			@page.find("[data-action-for='#{action}']")
-		end
 
 
 		def self.define_accessor_methods(base)
