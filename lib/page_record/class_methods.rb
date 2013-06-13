@@ -2,8 +2,17 @@ module PageRecord
 	class PageRecord
 
 	  class << self
-	    attr_accessor :page, :type
+	    attr_accessor :type
 	  end
+
+	  def self.page=(new_page)
+	  	@@page = new_page
+	  end
+
+	  def self.page
+	  	@@page
+	  end
+
 
 	  def self.attributes(new_attributes)
 	  	undefine_class_methods(self)
@@ -155,10 +164,10 @@ private
 
 		def self.context_for_selector(selector)
 			if selector.blank?
-				@page
+				page
 			else
 				begin
-					@page.find(selector)
+					page.find(selector)
 					rescue Capybara::Ambiguous
 						raise MultipleRecords, "Found multiple HTML segments with selector #{selector} on page"				
 					rescue Capybara::ElementNotFound

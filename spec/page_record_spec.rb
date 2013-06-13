@@ -6,7 +6,7 @@ describe PageRecord::PageRecord do
 
 	before do
 	  class TeamPage < PageRecord::PageRecord; end
-		TeamPage.page = page
+		PageRecord::PageRecord.page = page
 	end
 
 
@@ -49,24 +49,35 @@ describe PageRecord::PageRecord do
 
   describe ".page=" do
   	before do
-  		TeamPage.page = nil # reset for the spec
+  		PageRecord::PageRecord.page = nil # reset for the spec
   	end
 
-  	subject {TeamPage.page = page }
+  	subject {PageRecord::PageRecord.page = page }
 
-  	it "sets the page" do
-			expect{subject}.to change{TeamPage.page}.from(nil).to(page)  		
+  	it "sets the page when called on PageRecord::PageRecord" do
+			expect{PageRecord::PageRecord.page = page}.to change{PageRecord::PageRecord.page}.from(nil).to(page)  		
   	end
+
+  	it "sets the page when called on subclass" do
+			expect{TeamPage.page = page}.to change{PageRecord::PageRecord.page}.from(nil).to(page)  		
+  	end
+
+
   end
 
   describe ".page" do
 
-  	subject {TeamPage.page}
 
-  	it "gets the page" do
-			expect(subject).to eq page  		
+  	it "gets the page on PageRecord::PageRecord" do
+			expect(PageRecord::PageRecord.page).to eq page  		
   	end
+
+  	it "gets the page on subclass" do
+			expect(TeamPage.page).to eq page  		
+  	end
+
   end
+
 
 
 	describe ".all" do
