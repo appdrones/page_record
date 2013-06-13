@@ -4,7 +4,7 @@ module PageRecord
 		def self.inherited(base)
 			base.class_eval do
 				@base_name =  base.to_s.gsub('Page', '')
-				@type = @base_name.downcase
+				@type = @base_name.underscore
 				@host_class = @base_name.constantize
 				@attributes = @host_class.attribute_names.clone
 				@attributes.delete('id') # id is a special case attribute

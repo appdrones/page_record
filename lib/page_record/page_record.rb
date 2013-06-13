@@ -15,6 +15,7 @@ module PageRecord
 			begin
 				context = self.class.context_for_selector(selector)
 				@record = context.find("[data-#{@type}-id#{id_text}]#{filter}")
+				@id = @record["data-#{@type}-id"] if @id.blank?
 			rescue Capybara::Ambiguous
 				raise MultipleRecords, "Found multiple #{@type} record with id #{@id} on page"				
 			rescue Capybara::ElementNotFound
