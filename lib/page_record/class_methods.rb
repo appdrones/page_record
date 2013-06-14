@@ -3,15 +3,13 @@ module PageRecord
 
 		def self.inherited(base)
 			base.class_eval do
-				@base_name =  base.to_s.gsub('Page', '')
-				@type = @base_name.underscore
-				@host_class = @base_name.constantize
-				@attributes = @host_class.attribute_names.clone
-				@attributes.delete('id') # id is a special case attribute
+				set_type_name(base)
+				get_attribute_names
 			end
 			define_class_methods(base)
 			define_instance_methods(base)
 		end
+
 
 	  class << self
 	    attr_accessor :type
@@ -35,6 +33,21 @@ module PageRecord
 
 
 private
+
+		def self.set_type_name(base)
+			@base_name =  base.to_s.gsub('Page', '')
+			@type = @base_name.underscore
+		end
+
+		def self.get_attribute_names
+			begin
+				@host_class = @base_name.constantize
+				@attributes = @host_class.attribute_names.clone
+				@attributes.delete('id') # id is a special case attribute
+			rescue NameError
+				@attributes = []
+			end
+		end
 
 
 		def self.define_accessor_methods(base)
