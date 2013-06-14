@@ -64,17 +64,6 @@ private
 			end
 		end
 
-		def self.undefine_class_methods(base)
-			eigenclass = class << base; self; end
-			attributes = base.instance_variable_get('@attributes')
- 			eigenclass.instance_eval do
-				attributes.each do | attribute|
-					remove_method "find_by_#{attribute}"
-				end
-			end
-		end
-
-
 
 		def self.define_instance_methods(base)
 			define_accessor_methods(base)		

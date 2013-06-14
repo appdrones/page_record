@@ -9,6 +9,23 @@ describe PageRecord::PageRecord do
 		PageRecord::PageRecord.page = page
 	end
 
+  describe ".type" do
+
+  	before do
+	  	class CamelCase
+				def self.attribute_names
+					[ 'id' , 'name', 'points', 'ranking', 'goals']
+				end
+			end
+			class CamelCasePage < PageRecord::PageRecord; end
+		end
+
+		it "returns the internal type of the class" do
+			expect( CamelCasePage.type).to eq "camel_case"
+		end
+
+  end
+
 
   describe ".attributes" do
   	before do
@@ -317,7 +334,7 @@ describe PageRecord::PageRecord do
 		context "attribute is on page" do
 
 			it "returns the dom object" do
-				expect( subject.name?.class).to eq Capybara::Node::Simple
+				expect( subject.name?.class).to eq Capybara::Node::Element
 			end
 		end
 
@@ -363,7 +380,6 @@ describe PageRecord::PageRecord do
 	  	include_context "page one record in a form"
 
 			it "sets the attribute to specified value" do
-				pending
 				expect{subject}.to change{record.name}.from(nil).to('FC Utrecht')
 			end
 		end
@@ -388,7 +404,7 @@ describe PageRecord::PageRecord do
 			subject {record.create}
 
 			it "clicks on the specified action element" do
-				pending "waits for testing to go to real pages"
+				expect{subject}.not_to raise_error(PageRecord::NotInputField) # TODO can we make it better?
 			end
 
 

@@ -8,9 +8,17 @@ require 'coveralls'
 Coveralls.wear!
 require 'page_record'
 require 'capybara'
-require_relative './team'
-require_relative './shared_contexts'
-require_relative './shared_examples'
+require 'capybara/dsl'
+include Capybara::DSL
+
+require_relative './support/test_app'
+require_relative './support/team'
+require_relative './support/shared_contexts'
+require_relative './support/shared_examples'
+
+Capybara.app = TestApp
+Capybara.app_host = nil
+
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
