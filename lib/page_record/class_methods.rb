@@ -23,6 +23,15 @@ module PageRecord
 	  	@@page
 	  end
 
+	  def self.selector( new_selector)
+	  	@selector = new_selector
+	  end
+
+	  def self.filter( new_filter)
+	  	@filter = new_filter
+	  end
+
+
 	  def self.attributes(new_attributes)
 	  	undefine_class_methods(self)
 	  	undefine_instance_methods(self)

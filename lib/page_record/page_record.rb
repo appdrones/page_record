@@ -6,7 +6,9 @@ module PageRecord
 		attr_reader :id
 		alias :id? :id
 
-		def initialize(id="", selector="", filter="")
+		def initialize(id=nil, selector=nil, filter=nil)
+			selector ||= self.instance_variable_get('@selector')
+			filter ||= self.instance_variable_get('@filter')
 			@page = self.class.page
 			# raise PageNotSet, "page variable not set" unless @page
 			@type = self.class.type
