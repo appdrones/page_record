@@ -11,7 +11,7 @@ module PageRecord
 			filter ||= self.instance_variable_get('@filter')
 			@page = self.class.page
 			# raise PageNotSet, "page variable not set" unless @page
-			@type = self.class.type
+			@type = self.class.instance_variable_get('@type')
 			@id = id.to_s
 			id_text = @id.blank? ? "" : "='#{@id}'"
 			begin

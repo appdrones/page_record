@@ -11,10 +11,6 @@ module PageRecord
 		end
 
 
-	  class << self
-	    attr_accessor :type
-	  end
-
 	  def self.page=(new_page)
 	  	@@page = new_page
 	  end
@@ -29,6 +25,10 @@ module PageRecord
 
 	  def self.filter( new_filter)
 	  	@filter = new_filter
+	  end
+
+	  def self.type( new_type)
+	  	@type = new_type
 	  end
 
 
@@ -124,7 +124,7 @@ private
 				page
 			else
 				begin
-					page.find(selector)
+					page.find(selector).find(:xpath, "..")
 					rescue Capybara::Ambiguous
 						raise MultipleRecords, "Found multiple HTML segments with selector #{selector} on page"				
 					rescue Capybara::ElementNotFound

@@ -23,6 +23,7 @@ module PageRecord
 			begin
 				selector ||= self.instance_variable_get('@selector')
 				filter ||= self.instance_variable_get('@filter')
+				
 				context = self.context_for_selector(selector)
 				record = context.find("[data-#{@type}-id]#{filter} > [data-attribute-for='#{attribute}']", :text => value)
 				parent = record.find(:xpath, "..")

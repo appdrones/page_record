@@ -21,6 +21,7 @@ describe PageRecord::PageRecord do
 		end
 
 		it "returns the internal type of the class" do
+			pending
 			expect( CamelCasePage.type).to eq "camel_case"
 		end
 
