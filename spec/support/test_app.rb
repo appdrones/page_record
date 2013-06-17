@@ -1,6 +1,7 @@
 require 'sinatra/base'
 
 
+# @private This is just a test class
 class TestApp < Sinatra::Base
 
   set :root, File.dirname(__FILE__)

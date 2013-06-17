@@ -1,2 +1,5 @@
-.coverage/*
 /coverage/
+/doc/
+/.yardoc/
+/pkg/
+*.gem

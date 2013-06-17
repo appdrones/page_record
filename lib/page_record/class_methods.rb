@@ -1,6 +1,7 @@
 module PageRecord
 	class PageRecord
 
+		# @private
 		def self.inherited(base)
 			base.class_eval do
 				set_type_name(base)
@@ -11,27 +12,94 @@ module PageRecord
 		end
 
 
-	  def self.page=(new_page)
-	  	@@page = new_page
-	  end
+		##
+		# Set's the page {PageRecord::PageRecord} uses for all page operations
+		#
+		# @param new_page [Cabybara::Session] The Capybara page	
+		#
+		# @return [Capybara::Session]
+		#
+		def self.page=(new_page)
+			@@page = new_page
+		end
 
+		##
+		# Returns the page page {PageRecord::PageRecord} uses for all page operations
+		#
+		# @return [Capybara::Session]
+		#
 	  def self.page
 	  	@@page
 	  end
 
+		##
+		# Set's the default selector for this class 
+		#
+		# Example:
+		#
+		# ```ruby
+		# class TeamPage < PageRecord::PageRecord
+		#   selector "#first-table" 
+		# end
+		#```
+		# @param new_selector [String] The default selector to be used for all finders	
+		#
 	  def self.selector( new_selector)
 	  	@selector = new_selector
 	  end
 
+		##
+		# Set's the default filter for this class 
+		#
+		#
+		# Example:
+		#
+		# ```ruby
+		# class TeamPage < PageRecord::PageRecord
+		#   filter ".champions-league" 
+		# end
+		#```
+		#
+		# @param new_filter [String] The default filter to be used for all finders	
+		#
 	  def self.filter( new_filter)
 	  	@filter = new_filter
 	  end
 
+		##
+		# Set's the default type for this class 
+		#
+		# @param new_type [Symbol] The default type to be used for all finders	
+		#
+		# Example:
+		#
+		# ```ruby
+		# class TopDivisonPage < PageRecord::PageRecord
+		#   type :team
+		# end
+		#```
+		#
+		#
 	  def self.type( new_type)
 	  	@type = new_type
 	  end
 
 
+		##
+		# Set's the attributes this page recognises. This will override any types 
+		# inherited from the host class 
+		#
+		# @param new_attributes [Array] The attributes the page regognises	
+		#
+		# Example:
+		#
+		# ```ruby
+		# class TopDivisonPage < PageRecord::PageRecord
+		#   attributes [:name, :position, :ranking]
+		# end
+		#```
+		#
+		#
 	  def self.attributes(new_attributes)
 	  	undefine_class_methods(self)
 	  	undefine_instance_methods(self)
@@ -43,11 +111,13 @@ module PageRecord
 
 private
 
+		# @private
 		def self.set_type_name(base)
 			@base_name =  base.to_s.gsub('Page', '')
 			@type = @base_name.underscore
 		end
 
+		# @private
 		def self.get_attribute_names
 			begin
 				@host_class = @base_name.constantize
@@ -59,6 +129,7 @@ private
 		end
 
 
+		# @private
 		def self.define_accessor_methods(base)
 			base.instance_eval do
 				@attributes.each do | attribute |
@@ -76,6 +147,7 @@ private
 		end
 
 
+		# @private
 		def self.undefine_accessor_methods(base)
 			base.instance_eval do
 				@attributes.each do | attribute |
@@ -87,15 +159,18 @@ private
 		end
 
 
+		# @private
 		def self.define_instance_methods(base)
 			define_accessor_methods(base)		
 		end
 
+		# @private
 		def self.undefine_instance_methods(base)
 			undefine_accessor_methods(base)		
 		end
 
 
+		# @private
 		def self.define_class_methods(base)
 			eigenclass = class << base; self; end
 			attributes = base.instance_variable_get('@attributes')
@@ -108,6 +183,7 @@ private
 			end
 		end
 
+		# @private
 		def self.undefine_class_methods(base)
 			eigenclass = class << base; self; end
 			attributes = base.instance_variable_get('@attributes')
@@ -119,6 +195,7 @@ private
 		end
 
 
+		# @private
 		def self.context_for_selector(selector)
 			if selector.blank?
 				page
