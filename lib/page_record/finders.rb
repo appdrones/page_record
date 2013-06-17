@@ -14,10 +14,10 @@ module PageRecord
 	# tag. We use these tags to identify the records on the page.
 	#
 	#
-	class PageRecord
+	class Base
 		##
 		#
-		# Searches the page and returns an {::Array} of {PageRecord::PageRecord} of instances of
+		# Searches the page and returns an {::Array} of {PageRecord::Base} of instances of
 		# that match the selector and the filter. See {file:README.md#markup markup} for more
 		# details about formatting the page.
 		# 
@@ -32,7 +32,7 @@ module PageRecord
 		# @param	selector 	[String] selector to use for searching the table on the page
 		# @param	filter		[String] filter to use on the records on the page
 		#
-		# @return	[Array Pagerecord]	The Array containing instances of [PageRecord::PageRecord] 
+		# @return	[Array Pagerecord]	The Array containing instances of [PageRecord::Base] 
 		#  								with records that fit the selector and the filter
 		#
 		# @raise	[MultipleRecords]	if the page contains more then on set of records
@@ -52,7 +52,7 @@ module PageRecord
 
 		##
 		#
-		# Searches the page and returns an instance of {PageRecord::PageRecord} of instances of
+		# Searches the page and returns an instance of {PageRecord::Base} of instances of
 		# that matches the given id, selector and the filter. See {file:README.md#markup markup} for more
 		# details about formatting the page.
 		# 
@@ -76,7 +76,7 @@ module PageRecord
 		# @param	selector 	[String] selector to use for searching the table on the page
 		# @param	filter		[String] filter to use on the records on the page
 		#
-		# @return	[Pagerecord]	An instance of [PageRecord::PageRecord]
+		# @return	[Pagerecord]	An instance of [PageRecord::Base]
 		#
 		# @raise	[MultipleRecords] if the page contains more then on set of records
 		# @raise 	[RecordNotFound] if the page does not contain any of the specified records
@@ -89,13 +89,13 @@ module PageRecord
 
 		##
 		#
-		# Searches the page and returns an instance of {PageRecord::PageRecord} of instances of
+		# Searches the page and returns an instance of {PageRecord::Base} of instances of
 		# that matches the given attribute. See {file:README.md#markup markup} for more
 		# details about formatting the page.
 		#
-		# Although you can call this yourself, {PageRecord::PageRecord} uses this method for defining a
-		# finder for all attributes when you define your page class, {PageRecord::PageRecord}
-		# See {PageRecord::PageRecord.attributes} for more details.
+		# Although you can call this yourself, {PageRecord::Base} uses this method for defining a
+		# finder for all attributes when you define your page class, {PageRecord::Base}
+		# See {PageRecord::Base.attributes} for more details.
 		# 
 		# example:
 		#
@@ -110,7 +110,7 @@ module PageRecord
 		# @param	selector 	[String] selector to use for searching the table on the page
 		# @param	filter		[String] filter to use on the records on the page
 		#
-		# @return	[Pagerecord]	An instance of [PageRecord::PageRecord].
+		# @return	[Pagerecord]	An instance of [PageRecord::Base].
 		#
 		# @raise	[MultipleRecords] if the page contains more then on set of records
 		# @raise 	[RecordNotFound] if the page does not contain any of the specified records

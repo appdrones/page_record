@@ -1,5 +1,5 @@
 module PageRecord
-	class PageRecord
+	class Base
 
 		# @private
 		def self.inherited(base)
@@ -13,7 +13,7 @@ module PageRecord
 
 
 		##
-		# Set's the page {PageRecord::PageRecord} uses for all page operations
+		# Set's the page {PageRecord::Base} uses for all page operations
 		#
 		# @param new_page [Cabybara::Session] The Capybara page	
 		#
@@ -24,7 +24,7 @@ module PageRecord
 		end
 
 		##
-		# Returns the page page {PageRecord::PageRecord} uses for all page operations
+		# Returns the page page {PageRecord::Base} uses for all page operations
 		#
 		# @return [Capybara::Session]
 		#
@@ -38,7 +38,7 @@ module PageRecord
 		# Example:
 		#
 		# ```ruby
-		# class TeamPage < PageRecord::PageRecord
+		# class TeamPage < PageRecord::Base
 		#   selector "#first-table" 
 		# end
 		#```
@@ -55,7 +55,7 @@ module PageRecord
 		# Example:
 		#
 		# ```ruby
-		# class TeamPage < PageRecord::PageRecord
+		# class TeamPage < PageRecord::Base
 		#   filter ".champions-league" 
 		# end
 		#```
@@ -74,7 +74,7 @@ module PageRecord
 		# Example:
 		#
 		# ```ruby
-		# class TopDivisonPage < PageRecord::PageRecord
+		# class TopDivisonPage < PageRecord::Base
 		#   type :team
 		# end
 		#```
@@ -94,7 +94,7 @@ module PageRecord
 		# Example:
 		#
 		# ```ruby
-		# class TopDivisonPage < PageRecord::PageRecord
+		# class TopDivisonPage < PageRecord::Base
 		#   attributes [:name, :position, :ranking]
 		# end
 		#```

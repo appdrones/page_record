@@ -22,7 +22,7 @@ __Every__ record on the page __must__ have a `data-type-id='x'` attribute.
 ...
 <tag>
 ```
-Where `1` is the `id` of the record and `type` is the type of record. See {PageRecord::PageRecord.type} for infrmation regarding the `type`.
+Where `1` is the `id` of the record and `type` is the type of record. See {PageRecord::Base.type} for infrmation regarding the `type`.
 
 __Every__ attribute of a record, __must__ have a `data-attribute-for='name'` attribute. This tag __must__ be contained inside a tag contaning the `data-type-id='x'` 
 
@@ -38,7 +38,7 @@ Where `attr` is the name of the attribute.
 ##attributes
 
 ###reading the attributes
-With {PageRecord}, you can easily access the attributes of a record on the page. After you've got a valid instance of {PageRecord::PageRecord}, you can access all attributes in a normal ruby-like way.
+With {PageRecord}, you can easily access the attributes of a record on the page. After you've got a valid instance of {PageRecord::Base}, you can access all attributes in a normal ruby-like way.
 
 ```ruby
   champion = TeamPage.find(1)
@@ -53,12 +53,12 @@ Not only can you access the attributes for reading, you can also set the attribu
 ```
 
 ###specifying the attributes
-When you define you page class as a subclass of {PageRecord::PageRecord}, it automagicaly looks for a host class. To get the name of your host class, PageRecord removes the `Page` part of you class name and tries to use that class as a host class.
+When you define you page class as a subclass of {PageRecord::Base}, it automagicaly looks for a host class. To get the name of your host class, PageRecord removes the `Page` part of you class name and tries to use that class as a host class.
 
 Example:
 
 ```ruby
-class TeamPage < PageRecord::PageRecord
+class TeamPage < PageRecord::Base
 end
 ```
 
@@ -78,7 +78,7 @@ class Team < ActiveRecord::Base
 #
 end
 
-class TeamPage < PageRecord::PageRecord
+class TeamPage < PageRecord::Base
 end
 ```
 
@@ -173,7 +173,7 @@ require 'page_record/rspec'
 You also need te make sure, you set the page variable before you start.
 
 ```ruby
-PageRecord::PageRecord.page = session
+PageRecord::Base.page = session
 ```
 
 Also, you need te make sure your page definitions are included. 

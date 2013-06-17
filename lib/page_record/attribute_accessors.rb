@@ -1,5 +1,5 @@
 module PageRecord
-	class PageRecord
+	class Base
 		##
 		# Searches the record for the specified attribute and returns the {http://rubydoc.info/github/jnicklas/capybara/master/Capybara/Result Capybara Result}.
 		# This method is called when you access an attribute with a `?` of a record

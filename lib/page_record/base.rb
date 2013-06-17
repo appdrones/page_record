@@ -1,7 +1,7 @@
 
 module PageRecord
 
-	class PageRecord
+	class Base
 
 		attr_reader :id
 		alias :id? :id

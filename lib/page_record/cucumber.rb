@@ -1,5 +1,5 @@
 require 'page_record'
 
 Before do
-  PageRecord::PageRecord.page = page
+  PageRecord::Base.page = page
 end

@@ -39,7 +39,7 @@ module PageRecord
 
 	##
 	# This {::Exception} is raised when you have not set the page variable
-	# of the class. Check {PageRecord::PageRecord.page} for details
+	# of the class. Check {PageRecord::Base.page} for details
 	#
 	class PageNotSet < Exception
 	end

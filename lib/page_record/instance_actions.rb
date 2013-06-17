@@ -1,5 +1,5 @@
 module PageRecord
-	class PageRecord
+	class Base
 
 		##
 		# This is the implementation of the record action routine. It has two variants.

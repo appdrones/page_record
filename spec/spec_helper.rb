@@ -6,6 +6,7 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'coveralls'
 Coveralls.wear!
+
 require 'page_record'
 require 'capybara'
 require 'capybara/dsl'
