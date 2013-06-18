@@ -1,12 +1,12 @@
 require_relative  './spec_helper'
 
-describe PageRecord::PageRecord do
+describe PageRecord::Base do
 
 	include_context "page with single table with 3 records" # Default context
 
 	before do
-	  class TeamPage < PageRecord::PageRecord; end
-		PageRecord::PageRecord.page = page
+	  class TeamPage < PageRecord::Base; end
+		PageRecord::Base.page = page
 	end
 
   describe ".type" do
@@ -17,7 +17,7 @@ describe PageRecord::PageRecord do
 					[ 'id' , 'name', 'points', 'ranking', 'goals']
 				end
 			end
-			class CamelCasePage < PageRecord::PageRecord; end
+			class CamelCasePage < PageRecord::Base; end
 		end
 
 		it "returns the internal type of the class" do
@@ -30,7 +30,7 @@ describe PageRecord::PageRecord do
 
   describe ".attributes" do
   	before do
-		  class TeamPage < PageRecord::PageRecord
+		  class TeamPage < PageRecord::Base
 				attributes ['country', 'stadium']
 		  end
   	end
@@ -67,17 +67,17 @@ describe PageRecord::PageRecord do
 
   describe ".page=" do
   	before do
-  		PageRecord::PageRecord.page = nil # reset for the spec
+  		PageRecord::Base.page = nil # reset for the spec
   	end
 
-  	subject {PageRecord::PageRecord.page = page }
+  	subject {PageRecord::Base.page = page }
 
-  	it "sets the page when called on PageRecord::PageRecord" do
-			expect{PageRecord::PageRecord.page = page}.to change{PageRecord::PageRecord.page}.from(nil).to(page)  		
+  	it "sets the page when called on PageRecord::Base" do
+			expect{PageRecord::Base.page = page}.to change{PageRecord::Base.page}.from(nil).to(page)  		
   	end
 
   	it "sets the page when called on subclass" do
-			expect{TeamPage.page = page}.to change{PageRecord::PageRecord.page}.from(nil).to(page)  		
+			expect{TeamPage.page = page}.to change{PageRecord::Base.page}.from(nil).to(page)  		
   	end
 
 
@@ -86,8 +86,8 @@ describe PageRecord::PageRecord do
   describe ".page" do
 
 
-  	it "gets the page on PageRecord::PageRecord" do
-			expect(PageRecord::PageRecord.page).to eq page  		
+  	it "gets the page on PageRecord::Base" do
+			expect(PageRecord::Base.page).to eq page  		
   	end
 
   	it "gets the page on subclass" do
