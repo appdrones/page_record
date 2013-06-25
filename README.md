@@ -10,7 +10,7 @@ There are a lot of ways you can do this. PageRecord is one of these ways. PageRe
 TODO explain how it helps in testing
 
 ##Documentation
-Look at [the yard documentation](http://rubydoc.info/github/appdrones/page_record/PageRecord) for details.
+Look at [the yard documentation](http://rubydoc.info/github/appdrones/page_record/PageRecord) for details. Check [Changes](https://github.com/appdrones/page_record/blob/master/CHANGES.md) for (breaking) changes per version.
 
 ##Markup
 For [PageRecord](http://rubydoc.info/github/appdrones/page_record/PageRecord) to recognise the data on the page, the page __must__ follow certain `html` formatting guidelines.
@@ -83,6 +83,38 @@ end
 ```
 
 Then a record from the TeamPage responds to the attributes: `name`, `position`, `points`
+
+####what is the host class
+If you want to use a totaly different class name, you can use the `host_class` macro to specify what should be the host class.
+
+Example:
+
+```ruby
+class JustSomeClass
+  host_class Team
+end
+```
+
+This creates class `JustSomeClass` with the same capabilities as the `TeamPage` class in the previous example.
+
+###Adding some attributes
+If you have a full_name on a page that isn't available in the host_class, you can add that attribute.
+
+```ruby
+class TeamPage < PageRecord::Base
+  add_attributes ['full_name']
+end
+```
+
+###Setting all attributes
+Sometimes it is easier to not have a host class, but just set the attributes your self. You can do this withe the attributes macro.
+
+```ruby
+class JustSomePage < PageRecord::Base
+  attributes ['first_name', 'last_name', 'full_name']
+end
+```
+
 
 ##actions
 PageRecord support record actions and page actions. 
