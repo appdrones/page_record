@@ -6,7 +6,7 @@ describe PageRecord::Base do
 
 	before do
 	  class TeamPage < PageRecord::Base; end
-		PageRecord::Base.page = page
+		PageRecord::Base.page page
 	end
 
   describe ".type" do
@@ -20,18 +20,85 @@ describe PageRecord::Base do
 			class CamelCasePage < PageRecord::Base; end
 		end
 
-		it "returns the internal type of the class" do
-			pending
-			expect( CamelCasePage.type).to eq "camel_case"
+		context "no type given" do
+
+			it "returns the internal type of the class " do
+				expect( CamelCasePage.type).to eq "camel_case"
+			end
 		end
+
+		context "a type given" do
+
+			before do
+				class CamelCasePage < PageRecord::Base
+					type :team
+				end
+			end
+
+			it "sets the internal type of the class" do
+				expect( CamelCasePage.type).to eq :team
+			end
+		end
+
 
   end
 
 
   describe ".attributes" do
+
+  	after do
+			Object.send(:remove_const, :TeamPage)
+  	end
+
+  	context "no parameter given" do
+
+  		it "returns all current recognised attributes" do
+				expect(TeamPage.attributes).to eq ['name', 'points', 'ranking', 'goals'] 		
+			end
+  	end
+
+  	context "parameter given" do
+
+	  	subject { TeamPage}
+
+	  	before do
+			  class TeamPage < PageRecord::Base
+					attributes ['country', 'stadium']
+			  end
+	  	end
+
+	  	it "clears all old class methods" do
+				expect(subject).not_to respond_to(:find_by_name)  		
+				expect(subject).not_to respond_to(:find_by_ranking)  		
+	  	end
+
+	  	it "adds new class methods to class " do
+				expect(subject).to respond_to(:find_by_country)
+				expect(subject).to respond_to(:find_by_stadium)	
+	  	end
+
+	  	it "clears all old instance methods" do
+				expect(subject.new(1)).not_to respond_to(:name)  		
+				expect(subject.new(1)).not_to respond_to(:ranking)  		
+	  	end
+
+	  	it "adds new class methods to class " do
+				expect(subject.new(1)).to respond_to(:country)
+				expect(subject.new(1)).to respond_to(:stadium)	
+	  	end
+
+  		it "returns all current recognised attributes" do
+				expect(TeamPage.attributes).to eq ['country', 'stadium'] 		
+			end
+	  end
+
+  end
+
+
+  describe ".add_attributes" do
   	before do
 		  class TeamPage < PageRecord::Base
-				attributes ['country', 'stadium']
+				add_attributes ['country', 'stadium']
 		  end
   	end
 
@@ -41,9 +108,10 @@ describe PageRecord::Base do
 
   	subject { TeamPage}
 
-  	it "clears all old class methods" do
-			expect(subject).not_to respond_to(:find_by_name)  		
-			expect(subject).not_to respond_to(:find_by_ranking)  		
+
+  	it "keeps all old class methods" do
+			expect(subject).to respond_to(:find_by_name)  		
+			expect(subject).to respond_to(:find_by_ranking)  		
   	end
 
   	it "adds new class methods to class " do
@@ -51,9 +119,9 @@ describe PageRecord::Base do
 			expect(subject).to respond_to(:find_by_stadium)	
   	end
 
-  	it "clears all old instance methods" do
-			expect(subject.new(1)).not_to respond_to(:name)  		
-			expect(subject.new(1)).not_to respond_to(:ranking)  		
+  	it "keeps all old instance methods" do
+			expect(subject.new(1)).to respond_to(:name)  		
+			expect(subject.new(1)).to respond_to(:ranking)  		
   	end
 
   	it "adds new class methods to class " do
@@ -61,38 +129,78 @@ describe PageRecord::Base do
 			expect(subject.new(1)).to respond_to(:stadium)	
   	end
 
-  end
-
-
-
-  describe ".page=" do
-  	before do
-  		PageRecord::Base.page = nil # reset for the spec
-  	end
-
-  	subject {PageRecord::Base.page = page }
-
-  	it "sets the page when called on PageRecord::Base" do
-			expect{PageRecord::Base.page = page}.to change{PageRecord::Base.page}.from(nil).to(page)  		
-  	end
-
-  	it "sets the page when called on subclass" do
-			expect{TeamPage.page = page}.to change{PageRecord::Base.page}.from(nil).to(page)  		
+  	it "returns all current attributes" do
+  		expect(subject.add_attributes ['more']).to eq ['name', 'points', 'ranking', 'goals', 'country', 'stadium', 'more' ]
   	end
 
 
   end
+
+
+
 
   describe ".page" do
 
+  	context "with a parameter" do
+	  	let(:test_page) { Object.new}
+	  	subject {PageRecord::Base.page test_page }
 
-  	it "gets the page on PageRecord::Base" do
-			expect(PageRecord::Base.page).to eq page  		
-  	end
+	  	it "sets the page when called on PageRecord::Base" do
+				expect{subject}.to change{PageRecord::Base.page}.to(test_page)  		
+	  	end
 
-  	it "gets the page on subclass" do
-			expect(TeamPage.page).to eq page  		
-  	end
+	  	it "sets the page when called on subclass" do
+				expect{TeamPage.page test_page}.to change{PageRecord::Base.page}.to(test_page)  		
+	  	end
+	  end
+
+	  context "without a parameter" do
+	  	it "gets the page on PageRecord::Base" do
+				expect(PageRecord::Base.page).to eq page  		
+	  	end
+
+	  	it "gets the page on subclass" do
+				expect(TeamPage.page).to eq page  		
+	  	end
+	  end
+
+
+  end
+
+
+  describe ".host_class" do
+
+  	context "with a parameter" do
+
+  		before do
+  			class FunnyRecord < PageRecord::Base
+  				host_class Team
+  			end
+  		end
+
+  		# TODO refactor test
+	  	subject {FunnyRecord.new(1) }
+
+	  	it "sets the host class" do
+				expect(FunnyRecord.host_class).to eq Team  		
+	  	end
+
+			it "responds to all attributes of host_class" do
+				attributes = [ 'name', 'points', 'ranking', 'goals']
+				attributes.each do |attribute|
+					expect(subject).to respond_to(attribute)
+				end
+			end
+
+	  end
+
+	  context "without a parameter" do
+
+	  	it "returns the host_class" do
+				expect(FunnyRecord.host_class).to eq Team
+	  	end
+
+	  end
 
   end
 
@@ -116,8 +224,6 @@ describe PageRecord::Base do
 						expect( subject.map {|c| c.name}).not_to include('Feijenoord')
 						expect( subject.map {|c| c.name}).to include(*['Ajax', 'PSV'])
 					end
-
-
 			end
 
 

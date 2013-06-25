@@ -13,24 +13,35 @@ module PageRecord
 
 
 		##
-		# Set's the page {PageRecord::Base} uses for all page operations
+		# Set's the page {PageRecord::Base} uses for all page operations.
+		# when no parameter is given or the parameter is nil, just return the current value
 		#
 		# @param new_page [Cabybara::Session] The Capybara page	
 		#
 		# @return [Capybara::Session]
 		#
-		def self.page=(new_page)
-			@@page = new_page
+		def self.page (new_page = nil)
+			new_page ? @@page = new_page : @@page
 		end
 
 		##
-		# Returns the page page {PageRecord::Base} uses for all page operations
+		# Set's the page host class 
 		#
-		# @return [Capybara::Session]
+		# @param new_host_class an ActiveRecord like class	
 		#
-	  def self.page
-	  	@@page
-	  end
+		# @return [Class]
+		#
+		def self.host_class (new_host_class = nil)
+			if new_host_class
+				@host_class = new_host_class
+				@host_name =  new_host_class.to_s
+				@type = @host_name.underscore
+				get_attribute_names
+				define_class_methods(self)
+				define_instance_methods(self)
+			end
+			@host_class
+		end
 
 		##
 		# Set's the default selector for this class 
@@ -69,7 +80,9 @@ module PageRecord
 		##
 		# Set's the default type for this class 
 		#
-		# @param new_type [Symbol] The default type to be used for all finders	
+		# @param new_type [Symbol] The default type to be used for all finders. If type is nil just return the current type
+		# 
+		# @return [Symbol] the type set.
 		#
 		# Example:
 		#
@@ -77,20 +90,24 @@ module PageRecord
 		# class TopDivisonPage < PageRecord::Base
 		#   type :team
 		# end
+		#
+		# TopDivisonPage.type # returns :team
 		#```
 		#
 		#
-	  def self.type( new_type)
-	  	@type = new_type
+	  def self.type( new_type = nil)
+	  	new_type ? @type = new_type : @type
 	  end
 
 
 		##
 		# Set's the attributes this page recognises. This will override any types 
-		# inherited from the host class 
+		# inherited from the host class. When you don't specify a parameter, or a nil parameter
+		# .attributes will return the current set of attributes
 		#
 		# @param new_attributes [Array] The attributes the page regognises	
 		#
+		# @return attributes 	[Array] returns the array of attributes the page recognises
 		# Example:
 		#
 		# ```ruby
@@ -100,12 +117,38 @@ module PageRecord
 		#```
 		#
 		#
-	  def self.attributes(new_attributes)
-	  	undefine_class_methods(self)
-	  	undefine_instance_methods(self)
-	  	@attributes = new_attributes
+	  def self.attributes(new_attributes = nil)
+	  	if new_attributes
+		  	undefine_class_methods(self)
+		  	undefine_instance_methods(self)
+		  	@attributes = new_attributes
+		  	define_class_methods(self)
+		  	define_instance_methods(self)
+		  end
+	  	@attributes
+	  end
+
+
+		##
+		# Add some new attributes to the already availabe attributes
+		#
+		# @param extra_attributes [Array] The additional attributes the page regognises	
+		#
+		# Example:
+		#
+		# ```ruby
+		# class TopDivisonPage < PageRecord::Base
+		#   add_attributes [:full_name, :address_line]
+		# end
+		#```
+		#
+		#
+	  def self.add_attributes(extra_attributes)
+	  	@attributes.concat(extra_attributes)
+	  	# TODO check if we can optimise this to only add the new methods
 	  	define_class_methods(self)
 	  	define_instance_methods(self)
+	  	@attributes
 	  end
 
 
@@ -113,14 +156,14 @@ private
 
 		# @private
 		def self.set_type_name(base)
-			@base_name =  base.to_s.gsub('Page', '')
-			@type = @base_name.underscore
+			@host_name =  base.to_s.gsub('Page', '')
+			@type = @host_name.underscore
+			@host_class = @host_name.constantize			
 		end
 
 		# @private
 		def self.get_attribute_names
 			begin
-				@host_class = @base_name.constantize
 				@attributes = @host_class.attribute_names.clone
 				@attributes.delete('id') # id is a special case attribute
 			rescue NameError
