@@ -170,13 +170,14 @@ describe PageRecord::Base do
 
   describe ".host_class" do
 
+		before do
+			class FunnyRecord < PageRecord::Base
+				host_class Team
+			end
+		end
+
   	context "with a parameter" do
 
-  		before do
-  			class FunnyRecord < PageRecord::Base
-  				host_class Team
-  			end
-  		end
 
   		# TODO refactor test
 	  	subject {FunnyRecord.new(1) }
