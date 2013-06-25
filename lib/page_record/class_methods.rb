@@ -156,9 +156,14 @@ private
 
 		# @private
 		def self.set_type_name(base)
-			@host_name =  base.to_s.gsub('Page', '')
-			@type = @host_name.underscore
-			@host_class = @host_name.constantize			
+			begin
+				@host_name =  base.to_s.gsub('Page', '')
+				@type = @host_name.underscore
+				@host_class = @host_name.constantize			
+			rescue NameError
+				@host_name =  ''
+				@host_class = ''
+			end			
 		end
 
 		# @private

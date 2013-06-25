@@ -17,10 +17,18 @@ describe PageRecord::Base do
 					[ 'id' , 'name', 'points', 'ranking', 'goals']
 				end
 			end
-			class CamelCasePage < PageRecord::Base; end
 		end
 
+		after do 
+			Object.send(:remove_const, :CamelCasePage)
+		end
+
+
 		context "no type given" do
+
+			before do
+				class CamelCasePage < PageRecord::Base; end
+			end
 
 			it "returns the internal type of the class " do
 				expect( CamelCasePage.type).to eq "camel_case"
@@ -535,6 +543,19 @@ describe PageRecord::Base do
 
 	describe ".attributes" do
 		pending
+	end
+
+	describe "found bugs" do
+
+		describe "class name contains word page but doens't exist" do
+
+			it "doesn'throw exception" do
+				expect { class RubbishPage < PageRecord::Base; end }.not_to raise_error
+			end
+
+		end
+
+
 	end
 
 
