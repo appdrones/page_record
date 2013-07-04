@@ -1,0 +1,3 @@
+[submodule "example"]
+	path = example
+	url = https://github.com/appdrones/page_record_example.git

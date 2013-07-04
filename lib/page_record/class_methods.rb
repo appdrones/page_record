@@ -107,7 +107,7 @@ module PageRecord
 		#
 		# @param new_attributes [Array] The attributes the page regognises	
 		#
-		# @return attributes 	[Array] returns the array of attributes the page recognises
+		# @return [Array] returns the array of attributes the page recognises
 		# Example:
 		#
 		# ```ruby
