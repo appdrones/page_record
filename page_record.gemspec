@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = PageRecord::VERSION
   spec.authors       = ["Bert Hajee"]
   spec.email         = ["hajee@moretIA.com"]
-  spec.description   = %q{ActiveRecord like reading from specialy formatted HTML-page}
-  spec.summary       = %q{Using some specialy formatted 'data-...' tags you can read records from HTML pages like an ActiveRecord page}
+  spec.description   = %q{Page Object implementation with ActiveRecord like reading from specialy formatted HTML-page}
+  spec.summary       = %q{Page Object implementation. Using some specialy formatted 'data-...' tags you can read records from HTML pages like an ActiveRecord page}
   spec.homepage      = "https://github.com/appdrones/page_record"
   spec.license       = "MIT"
 

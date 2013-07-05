@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    page_record (0.3.0)
+    page_record (0.3.1)
       activesupport
       capybara (~> 2.1.0)
 
