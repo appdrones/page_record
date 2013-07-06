@@ -8,8 +8,10 @@
 ##V0.2.1
 * Fixed a bug. PageRecord stack dumped when the class contained the name `Page` 
 
-
 ##V0.3.0
-* Fixed a bug. PageRecord stack dumped when the class contained the name `Page` 
 * Added rails helpers to make it easy in rails to have a form, recognised by PageRecord
 * Added other helpers to mke it easy to add `actions` and `attribute` tags
+
+##V0.4.0
+* Added support for Formtasic
+* Added spec's for rails helpers

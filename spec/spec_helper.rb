@@ -7,6 +7,13 @@
 require 'coveralls'
 Coveralls.wear!
 
+if defined?(ActionView::Base)
+	require 'rails'
+  require 'rspec/rails/mocks'
+  include RSpec::Rails::Mocks
+end
+
+
 require 'page_record'
 require 'capybara'
 require 'capybara/dsl'

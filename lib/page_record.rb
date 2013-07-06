@@ -7,10 +7,13 @@ require "page_record/attribute_accessors"
 require "page_record/class_actions"
 require "page_record/class_methods"
 require "page_record/errors"
-begin
+if defined?(ActionView::Base)
 	require "page_record/helpers"
 	require "page_record/form_builder"
-rescue
-	# probably not in rails. Leave it like this
-	# TODO make this beter
 end
+if defined?(Formtastic::Helpers::FormHelper)
+	require "page_record/formtastic"
+end
+
+
+

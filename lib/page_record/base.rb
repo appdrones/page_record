@@ -1,4 +1,3 @@
-
 module PageRecord
 
 	class Base
@@ -27,3 +26,4 @@ module PageRecord
 
   end
 end
+

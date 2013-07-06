@@ -33,7 +33,6 @@ module PageRecord
         id = instance_eval("@#{type}.id")
       end
       id ||= 'new'
-      @type = type
       Hash["data-#{type}-id",id]
     end
 
@@ -172,4 +171,7 @@ module PageRecord
 
 end
 
-ActionView::Base.send :include, PageRecord::Helpers
+begin
+	ActionView::Base.send :include, PageRecord::Helpers
+rescue NameError
+end
