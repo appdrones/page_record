@@ -10,7 +10,6 @@ shared_context "page with two tables with 3 records" do
   end
 end
 
-
 shared_context "page without records" do
   before do
     visit "/page-without-records"
@@ -28,7 +27,6 @@ shared_context "page one record in a form" do
     visit "/page-one-record-in-a-form"
   end
 end
-
 
 shared_context "page one record" do
   before do

@@ -8,11 +8,10 @@ require 'coveralls'
 Coveralls.wear!
 
 if defined?(ActionView::Base)
-	require 'rails'
+  require 'rails'
   require 'rspec/rails/mocks'
   include RSpec::Rails::Mocks
 end
-
 
 require 'page_record'
 require 'capybara'
@@ -26,7 +25,6 @@ require_relative './support/shared_examples'
 
 Capybara.app = TestApp
 Capybara.app_host = nil
-
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true

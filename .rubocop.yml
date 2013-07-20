@@ -1,0 +1,13 @@
+Encoding:
+  Enabled: false
+
+# Limit lines to 80 characters.
+LineLength:
+  Enabled: false
+
+Documentation:
+  Enabled: false 
+
+MethodLength:
+  CountComments: false  # count full line comments?
+  Max: 15

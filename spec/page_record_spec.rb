@@ -2,561 +2,530 @@ require_relative  './spec_helper'
 
 describe PageRecord::Base do
 
-	include_context "page with single table with 3 records" # Default context
+  include_context "page with single table with 3 records" # Default context
 
-	before do
-	  class TeamPage < PageRecord::Base; end
-		PageRecord::Base.page page
-	end
+  before do
+    class TeamPage < PageRecord::Base; end
+    PageRecord::Base.page page
+  end
 
   describe ".type" do
 
-  	before do
-	  	class CamelCase
-				def self.attribute_names
-					[ 'id' , 'name', 'points', 'ranking', 'goals']
-				end
-			end
-		end
+    before do
+      class CamelCase
+        def self.attribute_names
+          %w(id name points ranking goals)
+        end
+      end
+    end
 
-		after do 
-			Object.send(:remove_const, :CamelCasePage)
-		end
+    after do
+      Object.send(:remove_const, :CamelCasePage)
+    end
 
+    context "no type given" do
 
-		context "no type given" do
+      before do
+        class CamelCasePage < PageRecord::Base; end
+      end
 
-			before do
-				class CamelCasePage < PageRecord::Base; end
-			end
+      it "returns the internal type of the class " do
+        expect(CamelCasePage.type).to eq "camel_case"
+      end
+    end
 
-			it "returns the internal type of the class " do
-				expect( CamelCasePage.type).to eq "camel_case"
-			end
-		end
+    context "a type given" do
 
-		context "a type given" do
+      before do
+        class CamelCasePage < PageRecord::Base
+          type :team
+        end
+      end
 
-			before do
-				class CamelCasePage < PageRecord::Base
-					type :team
-				end
-			end
-
-			it "sets the internal type of the class" do
-				expect( CamelCasePage.type).to eq :team
-			end
-		end
-
+      it "sets the internal type of the class" do
+        expect(CamelCasePage.type).to eq :team
+      end
+    end
 
   end
-
 
   describe ".attributes" do
 
-  	after do
-			Object.send(:remove_const, :TeamPage)
-  	end
+    after do
+      Object.send(:remove_const, :TeamPage)
+    end
 
-  	context "no parameter given" do
+    context "no parameter given" do
 
-  		it "returns all current recognised attributes" do
-				expect(TeamPage.attributes).to eq ['name', 'points', 'ranking', 'goals'] 		
-			end
-  	end
+      it "returns all current recognised attributes" do
+        expect(TeamPage.attributes).to eq %w(name points ranking goals)
+      end
+    end
 
-  	context "parameter given" do
+    context "parameter given" do
 
-	  	subject { TeamPage}
+      subject { TeamPage }
 
-	  	before do
-			  class TeamPage < PageRecord::Base
-					attributes ['country', 'stadium']
-			  end
-	  	end
+      before do
+        class TeamPage < PageRecord::Base
+          attributes %w(country stadium)
+        end
+      end
 
-	  	it "clears all old class methods" do
-				expect(subject).not_to respond_to(:find_by_name)  		
-				expect(subject).not_to respond_to(:find_by_ranking)  		
-	  	end
+      it "clears all old class methods" do
+        expect(subject).not_to respond_to(:find_by_name)
+        expect(subject).not_to respond_to(:find_by_ranking)
+      end
 
-	  	it "adds new class methods to class " do
-				expect(subject).to respond_to(:find_by_country)
-				expect(subject).to respond_to(:find_by_stadium)	
-	  	end
+      it "adds new class methods to class " do
+        expect(subject).to respond_to(:find_by_country)
+        expect(subject).to respond_to(:find_by_stadium)
+      end
 
-	  	it "clears all old instance methods" do
-				expect(subject.new(1)).not_to respond_to(:name)  		
-				expect(subject.new(1)).not_to respond_to(:ranking)  		
-	  	end
+      it "clears all old instance methods" do
+        expect(subject.new(1)).not_to respond_to(:name)
+        expect(subject.new(1)).not_to respond_to(:ranking)
+      end
 
-	  	it "adds new class methods to class " do
-				expect(subject.new(1)).to respond_to(:country)
-				expect(subject.new(1)).to respond_to(:stadium)	
-	  	end
+      it "adds new class methods to class " do
+        expect(subject.new(1)).to respond_to(:country)
+        expect(subject.new(1)).to respond_to(:stadium)
+      end
 
-  		it "returns all current recognised attributes" do
-				expect(TeamPage.attributes).to eq ['country', 'stadium'] 		
-			end
-	  end
+      it "returns all current recognised attributes" do
+        expect(TeamPage.attributes).to eq %w(country stadium)
+      end
+    end
 
   end
-
 
   describe ".add_attributes" do
-  	before do
-		  class TeamPage < PageRecord::Base
-				add_attributes ['country', 'stadium']
-		  end
-  	end
+    before do
+      class TeamPage < PageRecord::Base
+        add_attributes %w(country stadium)
+      end
+    end
 
-  	after do
-			Object.send(:remove_const, :TeamPage)
-  	end
+    after do
+      Object.send(:remove_const, :TeamPage)
+    end
 
-  	subject { TeamPage}
+    subject { TeamPage }
 
+    it "keeps all old class methods" do
+      expect(subject).to respond_to(:find_by_name)
+      expect(subject).to respond_to(:find_by_ranking)
+    end
 
-  	it "keeps all old class methods" do
-			expect(subject).to respond_to(:find_by_name)  		
-			expect(subject).to respond_to(:find_by_ranking)  		
-  	end
+    it "adds new class methods to class " do
+      expect(subject).to respond_to(:find_by_country)
+      expect(subject).to respond_to(:find_by_stadium)
+    end
 
-  	it "adds new class methods to class " do
-			expect(subject).to respond_to(:find_by_country)
-			expect(subject).to respond_to(:find_by_stadium)	
-  	end
+    it "keeps all old instance methods" do
+      expect(subject.new(1)).to respond_to(:name)
+      expect(subject.new(1)).to respond_to(:ranking)
+    end
 
-  	it "keeps all old instance methods" do
-			expect(subject.new(1)).to respond_to(:name)  		
-			expect(subject.new(1)).to respond_to(:ranking)  		
-  	end
+    it "adds new class methods to class " do
+      expect(subject.new(1)).to respond_to(:country)
+      expect(subject.new(1)).to respond_to(:stadium)
+    end
 
-  	it "adds new class methods to class " do
-			expect(subject.new(1)).to respond_to(:country)
-			expect(subject.new(1)).to respond_to(:stadium)	
-  	end
-
-  	it "returns all current attributes" do
-  		expect(subject.add_attributes ['more']).to eq ['name', 'points', 'ranking', 'goals', 'country', 'stadium', 'more' ]
-  	end
-
+    it "returns all current attributes" do
+      expect(subject.add_attributes ['more']).to eq %w(name points ranking goals country stadium more)
+    end
 
   end
-
-
-
 
   describe ".page" do
 
-  	context "with a parameter" do
-	  	let(:test_page) { Object.new}
-	  	subject {PageRecord::Base.page test_page }
+    context "with a parameter" do
+      let(:test_page) { Object.new }
+      subject { PageRecord::Base.page test_page }
 
-	  	it "sets the page when called on PageRecord::Base" do
-				expect{subject}.to change{PageRecord::Base.page}.to(test_page)  		
-	  	end
+      it "sets the page when called on PageRecord::Base" do
+        expect { subject }.to change { PageRecord::Base.page }.to(test_page)
+      end
 
-	  	it "sets the page when called on subclass" do
-				expect{TeamPage.page test_page}.to change{PageRecord::Base.page}.to(test_page)  		
-	  	end
-	  end
+      it "sets the page when called on subclass" do
+        expect { TeamPage.page test_page }.to change { PageRecord::Base.page }.to(test_page)
+      end
+    end
 
-	  context "without a parameter" do
-	  	it "gets the page on PageRecord::Base" do
-				expect(PageRecord::Base.page).to eq page  		
-	  	end
+    context "without a parameter" do
+      it "gets the page on PageRecord::Base" do
+        expect(PageRecord::Base.page).to eq page
+      end
 
-	  	it "gets the page on subclass" do
-				expect(TeamPage.page).to eq page  		
-	  	end
-	  end
-
+      it "gets the page on subclass" do
+        expect(TeamPage.page).to eq page
+      end
+    end
 
   end
-
 
   describe ".host_class" do
 
-		before do
-			class FunnyRecord < PageRecord::Base
-				host_class Team
-			end
-		end
+    before do
+      class FunnyRecord < PageRecord::Base
+        host_class Team
+      end
+    end
 
-  	context "with a parameter" do
+    context "with a parameter" do
 
+      # TODO: refactor test
+      subject { FunnyRecord.new(1) }
 
-  		# TODO refactor test
-	  	subject {FunnyRecord.new(1) }
+      it "sets the host class" do
+        expect(FunnyRecord.host_class).to eq Team
+      end
 
-	  	it "sets the host class" do
-				expect(FunnyRecord.host_class).to eq Team  		
-	  	end
+      it "responds to all attributes of host_class" do
+        attributes = %w(name points ranking goals)
+        attributes.each do |attribute|
+          expect(subject).to respond_to(attribute)
+        end
+      end
 
-			it "responds to all attributes of host_class" do
-				attributes = [ 'name', 'points', 'ranking', 'goals']
-				attributes.each do |attribute|
-					expect(subject).to respond_to(attribute)
-				end
-			end
+    end
 
-	  end
+    context "without a parameter" do
 
-	  context "without a parameter" do
+      it "returns the host_class" do
+        expect(FunnyRecord.host_class).to eq Team
+      end
 
-	  	it "returns the host_class" do
-				expect(FunnyRecord.host_class).to eq Team
-	  	end
-
-	  end
+    end
 
   end
 
+  describe ".all" do
 
+    subject { TeamPage.all(selector, filter) }
 
-	describe ".all" do
+    context "one set of records available on the page" do
+      let(:selector) { "" }
+      let(:filter) { "" }
 
+      it_behaves_like "valid call of .all"
 
-		subject {TeamPage.all( selector, filter) }
+      context "with a filter" do
+        let(:filter) { ".champions_league" }
 
-		context "one set of records available on the page" do
-			let(:selector)	{""}
-			let(:filter)	{""}
+        it "returns only the elements that contain the filter css" do
+          expect(subject.map { |c| c.name }).not_to include('Feijenoord')
+          expect(subject.map { |c| c.name }).to include(*%w(Ajax PSV))
+        end
+      end
 
-			it_behaves_like "valid call of .all"
+    end
 
-			context "with a filter" do
-				let(:filter)	{".champions_league"}
+    context "No records available on the page" do
 
-					it "returns only the elements that contain the filter css" do
-						expect( subject.map {|c| c.name}).not_to include('Feijenoord')
-						expect( subject.map {|c| c.name}).to include(*['Ajax', 'PSV'])
-					end
-			end
+      include_context "page without records"
+      let(:selector) { "" }
+      let(:filter) { "" }
 
+      it "returns an empty Array" do
+        expect(subject).to eq []
+      end
 
-		end
+    end
 
-		context "No records available on the page" do
+    context "multiple sets of records avialable on the page" do
+      include_context "page with two tables with 3 records"
 
-			include_context "page without records"
-			let(:selector)	{""}
-			let(:filter)	{""}
+      context "without selector" do
+        let(:selector) { "" }
+        let(:filter) { "" }
 
+        it "raises error PageRecord::MultipleRecords" do
+          expect { subject }.to raise_error(PageRecord::MultipleRecords)
+        end
 
-			it "returns an empty Array" do
-				expect(subject).to eq []
-			end
+      end
 
-		end
+      it_behaves_like "handles invalid selectors"
 
-		context "multiple sets of records avialable on the page" do
-			include_context "page with two tables with 3 records" 
+      context "with a correct selector" do
 
-			context "without selector" do
-				let(:selector)	{""}
-				let(:filter)	{""}
+        let(:selector) { "#first-table" }
+        let(:filter) { "" }
 
+        it_behaves_like "valid call of .all"
 
-				it "raises error PageRecord::MultipleRecords" do
-					expect{subject}.to raise_error(PageRecord::MultipleRecords)
-				end
+      end
 
-			end
+    end
 
-			it_behaves_like "handles invalid selectors"
+  end
 
-			context "with a correct selector" do
+  describe "inherited class" do
 
-				let(:selector)	{"#first-table"}
-				let(:filter)	{""}
+    subject { TeamPage.new(1) }
 
-				it_behaves_like "valid call of .all"
+    it "responds to all attributes of corresponding AR Class" do
+      Team.attribute_names.each do |attribute|
+        expect(subject).to respond_to(attribute)
+      end
+    end
 
-			end
+    it "responds <attribute>? of corresponding AR Class" do
+      Team.attribute_names.each do |attribute|
+        expect(subject).to respond_to("#{attribute}?")
+      end
+    end
 
-		end
+    #
+    # Checks a bug
+    it "leaves attribute_names of host class intact"
 
-	end	
+  end
 
+  describe "action method on class" do
+    pending
+  end
 
-	describe "inherited class" do
+  describe ".find" do
 
-		subject {TeamPage.new(1) }
+    subject { TeamPage.find(record_number, selector, filter) }
+    let(:selector) { "" }
+    let(:filter) { "" }
 
-			it "responds to all attributes of corresponding AR Class" do
-				Team.attribute_names.each do |attribute|
-					expect(subject).to respond_to(attribute)
-				end
-			end
+    context "find without an id" do
+      pending
+    end
 
-			it "responds <attribute>? of corresponding AR Class" do
-				Team.attribute_names.each do |attribute|
-					expect(subject).to respond_to("#{attribute}?")
-				end
-			end
+    context "one found on the page" do
 
-			#
-			# Checks a bug
-			it "leaves attribute_names of host class intact"
+      let(:record_number) { 1 }
 
+      it_behaves_like "a valid call of .find"
 
-	end
+      it_behaves_like "it handles filters"
 
-	describe "action method on class" do
-		pending
-	end
+    end
 
+    context "multiple record found on the page" do
 
-	describe ".find" do
+      let(:record_number) { 1 }
+      include_context "page with duplicate records"
 
-		subject {TeamPage.find(record_number, selector, filter) }
-		let(:selector) { ""}
-		let(:filter) {""}
+      subject { TeamPage.find(1) }
 
-		context "find without an id" do
-			pending
-		end
+      it "raises error PageRecord::MultipleRecords" do
+        expect { subject }.to raise_error(PageRecord::MultipleRecords)
+      end
 
-		context "one found on the page" do
+    end
 
-			let(:record_number) { 1}
+    context "no record on the page" do
 
-			it_behaves_like "a valid call of .find"
+      let(:record_number) { 37373 }
 
+      it "raises error PageRecord::RecordNotFound" do
+        expect { subject }.to raise_error(PageRecord::RecordNotFound)
+      end
 
-			it_behaves_like "it handles filters"
+    end
 
+    context "multiple sets of records available on the page" do
+      include_context "page with two tables with 3 records"
+      let(:record_number) { 1 }
 
-		end
+      context "without selector" do
+        let(:selector) { "" }
 
-		context "multiple record found on the page" do
+        it "raises error PageRecord::MultipleRecords" do
+          expect { subject }.to raise_error(PageRecord::MultipleRecords)
+        end
 
-			let(:record_number) { 1}
-			include_context "page with duplicate records"
+      end
 
-			subject {TeamPage.find(1) }
+      it_behaves_like "handles invalid selectors"
 
-			it "raises error PageRecord::MultipleRecords" do
-				expect{subject}.to raise_error(PageRecord::MultipleRecords)
-			end
+      context "with a correct selector" do
 
-		end
+        let(:selector) { "#first-table" }
+        it_behaves_like "a valid call of .find"
 
+      end
 
-		context "no record on the page" do
+    end
 
-			let(:record_number) { 37373}
+  end
 
-			it "raises error PageRecord::RecordNotFound" do
-				expect{subject}.to raise_error(PageRecord::RecordNotFound)
-			end
+  describe "find_by..." do
 
-		end
+    subject { TeamPage.find_by_name(name, selector, filter) }
+    let(:selector) { "" }
+    let(:filter) { "" }
 
-		context "multiple sets of records available on the page" do
-			include_context "page with two tables with 3 records" 
-			let(:record_number) {1}
+    context "no record on page" do
+      let(:name) { "unknown name" }
 
-			context "without selector" do
-				let(:selector)	{""}
+      it "raises error PageRecord::RecordNotFound" do
+        expect { subject }.to raise_error(PageRecord::RecordNotFound)
+      end
 
-				it "raises error PageRecord::MultipleRecords" do
-					expect{subject}.to raise_error(PageRecord::MultipleRecords)
-				end
+    end
 
-			end
+    context "multiple records on page" do
+      let(:name) { "Ajax" }
+      include_context "page with duplicate records"
 
-			it_behaves_like "handles invalid selectors"
+      it "raises error PageRecord::MultipleRecords" do
+        expect { subject }.to raise_error(PageRecord::MultipleRecords)
+      end
 
-			context "with a correct selector" do
+    end
 
-				let(:selector)	{"#first-table"}
-				it_behaves_like "a valid call of .find"
+    context "one record on page" do
+      let(:name) { "Ajax" }
 
-			end
+      it_behaves_like "a valid call of .find"
+      it_behaves_like "it handles filters"
 
-		end
+    end
 
-	end	
+    context "multiple sets of records avialable on the page" do
+      include_context "page with two tables with 3 records"
+      let(:name) { "Ajax" }
 
-	describe "find_by..." do
+      context "without selector" do
+        let(:selector) { "" }
 
-		subject { TeamPage.find_by_name(name, selector, filter)}
-		let(:selector) { ""}
-		let(:filter) {""}
+        it "raises error PageRecord::MultipleRecords" do
+          expect { subject }.to raise_error(PageRecord::MultipleRecords)
+        end
 
-		context "no record on page" do
-			let(:name) {"unknown name"}
+      end
 
-			it "raises error PageRecord::RecordNotFound" do
-				expect{subject}.to raise_error(PageRecord::RecordNotFound)
-			end
+      it_behaves_like "handles invalid selectors"
 
-		end
+      context "with a correct selector" do
 
-		context "multiple records on page" do
-			let(:name) {"Ajax"}
-			include_context "page with duplicate records"
+        let(:selector) { "#first-table" }
+        let(:name) { "Ajax" }
+        it_behaves_like "a valid call of .find"
 
-			it "raises error PageRecord::MultipleRecords" do
-				expect{subject}.to raise_error(PageRecord::MultipleRecords)
-			end
+      end
 
-		end
+    end
 
-		context "one record on page" do
-			let(:name) {"Ajax"}
+  end
 
-			it_behaves_like "a valid call of .find"
-			it_behaves_like "it handles filters"
+  describe "#...? " do
 
-		end
+    subject { TeamPage.find(1) }
 
-		context "multiple sets of records avialable on the page" do
-			include_context "page with two tables with 3 records" 
-			let(:name) {"Ajax"}
+    context "attribute is on page" do
 
-			context "without selector" do
-				let(:selector)	{""}
+      it "returns the dom object" do
+        expect(subject.name?.class).to eq Capybara::Node::Element
+      end
+    end
 
-				it "raises error PageRecord::MultipleRecords" do
-					expect{subject}.to raise_error(PageRecord::MultipleRecords)
-				end
+    context "attribute not on page" do
 
-			end
+      it "raises error PageRecord::AttributeNotFound" do
+        expect { subject.goals? }.to raise_error(PageRecord::AttributeNotFound)
+      end
 
-			it_behaves_like "handles invalid selectors"
+    end
+  end
 
-			context "with a correct selector" do
+  describe "#... valid attribute getter" do
 
-				let(:selector)	{"#first-table"}
-				let(:name) {"Ajax"}
-				it_behaves_like "a valid call of .find"
+    subject { TeamPage.find(1) }
+    include_context "page with single table with 3 records"
 
-			end
+    context "attribute is on page" do
 
-		end
+      it "returns a the value on the page" do
+        expect(subject.name).to eq 'Ajax'
+      end
+    end
 
+    context "attribute not on page" do
 
+      it "raises error PageRecord::AttributeNotFound" do
+        expect { subject.goals }.to raise_error(PageRecord::AttributeNotFound)
+      end
 
-	end
+    end
 
-	describe "#...? " do
+  end
 
-		subject {TeamPage.find(1)}
+  describe "#... valid attribute setter" do
 
-		context "attribute is on page" do
+    subject { record.name = 'FC Utrecht' }
+    let(:record) { TeamPage.find(1) }
 
-			it "returns the dom object" do
-				expect( subject.name?.class).to eq Capybara::Node::Element
-			end
-		end
+    context "attribute is an input field" do
+      include_context "page one record in a form"
 
-		context "attribute not on page" do
+      it "sets the attribute to specified value" do
+        expect { subject }.to change { record.name }.from(nil).to('FC Utrecht')
+      end
+    end
 
-			it "raises error PageRecord::AttributeNotFound" do
-				expect{subject.goals?}.to raise_error(PageRecord::AttributeNotFound)
-			end
+    context "attribute is an input field" do
+      include_context "page one record"
 
-		end
-	end
+      it "raises error PageRecord::NotInputField" do
+        expect { subject }.to raise_error(PageRecord::NotInputField)
+      end
 
-	describe "#... valid attribute getter" do
+    end
 
-		subject {TeamPage.find(1)}
-  	include_context "page with single table with 3 records"
+  end
 
-		context "attribute is on page" do
+  describe "#... action methods" do
 
-			it "returns a the value on the page" do
-				expect( subject.name).to eq 'Ajax'
-			end
-		end
+    let(:record) { TeamPage.find(1) }
+    include_context "page one record in a form"
 
-		context "attribute not on page" do
+    context "action exists on page" do
+      subject { record.create }
 
-			it "raises error PageRecord::AttributeNotFound" do
-				expect{subject.goals}.to raise_error(PageRecord::AttributeNotFound)
-			end
+      it "clicks on the specified action element" do
+        expect { subject }.not_to raise_error(PageRecord::NotInputField) # TODO: can we make it better?
+      end
 
-		end
+    end
 
+    context "action doesn't exist on page" do
+      subject { record.unkown }
 
-	end
+      it "raises error NoMethodError" do
+        expect { subject }.to raise_error(NoMethodError)
+      end
+    end
 
-	describe "#... valid attribute setter" do
+  end
 
-		subject {record.name = 'FC Utrecht'}
-		let(:record) { TeamPage.find(1)}
+  describe "#...? action methods" do
+    pending
+  end
 
+  describe ".attributes" do
+    pending
+  end
 
-		context "attribute is an input field" do
-	  	include_context "page one record in a form"
+  describe "found bugs" do
 
-			it "sets the attribute to specified value" do
-				expect{subject}.to change{record.name}.from(nil).to('FC Utrecht')
-			end
-		end
+    describe "class name contains word page but doens't exist" do
 
-		context "attribute is an input field" do
-	  	include_context "page one record"
+      it "doesn'throw exception" do
+        expect { class RubbishPage < PageRecord::Base; end }.not_to raise_error
+      end
 
-			it "raises error PageRecord::NotInputField" do
-				expect{subject}.to raise_error(PageRecord::NotInputField)
-			end
+    end
 
-		end
-
-	end
-
-	describe "#... action methods" do
-
-		let(:record) { TeamPage.find(1)}
-  	include_context "page one record in a form"
-
-		context "action exists on page" do
-			subject {record.create}
-
-			it "clicks on the specified action element" do
-				expect{subject}.not_to raise_error(PageRecord::NotInputField) # TODO can we make it better?
-			end
-
-
-		end
-
-		context "action doesn't exist on page" do
-			subject {record.unkown}
-
-			it "raises error NoMethodError" do
-				expect{subject}.to raise_error(NoMethodError)
-			end
-		end
-
-
-	end
-
-	describe "#...? action methods" do
-		pending
-	end
-
-	describe ".attributes" do
-		pending
-	end
-
-	describe "found bugs" do
-
-		describe "class name contains word page but doens't exist" do
-
-			it "doesn'throw exception" do
-				expect { class RubbishPage < PageRecord::Base; end }.not_to raise_error
-			end
-
-		end
-
-
-	end
-
+  end
 
 end
+# rubocop:enable StringLiterals

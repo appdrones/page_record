@@ -13,13 +13,12 @@ module Formtastic
         #
 
         def input_html_options
-          self.extend(PageRecord::Helpers)
+          extend(PageRecord::Helpers)
           input_html_options_org.merge(attribute_for(@method))
         end
       end
     end
   end
-
 
   module Actions
     module Buttonish
@@ -32,7 +31,7 @@ module Formtastic
       # for all action methods
       #
       def extra_button_html_options
-        self.extend(PageRecord::Helpers)
+        extend(PageRecord::Helpers)
         extra_button_html_options_org.merge(action_for(@method))
       end
 
@@ -46,21 +45,21 @@ module Formtastic
 
       #
       # This is a replacement method for the original `semantic_form_for` method from `Formtastic`.
-      # The only thing it does, is merge the `form_record_for` into the output. 
+      # The only thing it does, is merge the `form_record_for` into the output.
       #
       def semantic_form_for(record_or_name_or_array, *args, &proc)
-        self.extend(PageRecord::Helpers)
+        extend(PageRecord::Helpers)
         options = args.extract_options!
-        options||= {}
+        options ||= {}
         case record_or_name_or_array
         when String, Symbol
           object_name = record_or_name_or_array
         else
           object      = record_or_name_or_array.is_a?(Array) ? record_or_name_or_array.last : record_or_name_or_array
-          raise ArgumentError, "First argument in form cannot contain nil or be empty" unless object
+          raise ArgumentError, 'First argument in form cannot contain nil or be empty' unless object
           object_name = options[:as] || model_name_from_record_or_class(object).param_key
         end
-        options = options.merge(html:form_record_for(object_name))
+        options = options.merge(html: form_record_for(object_name))
         args << options
         semantic_form_for_org(record_or_name_or_array, *args, &proc)
       end
