@@ -38,6 +38,35 @@ module PageRecord
 
     ##
     #
+    # returns a string containing the record-type and the id. The id is based on the type. For example when
+    # you specify `:team` as the type, it will search for the `type` instance variable.
+    #
+    # example:
+    #
+    # ```ruby
+    # <tr <%= record_for(:team)%>>
+    # ```
+    # this returns the follwing HTML:
+    #
+    # ```html
+    # <tr data-team-id="2">
+    # ```
+    #
+    # @param type Symbol identifying the type of record and the variable to use
+    # @param var the variable to use. This is optional
+    #
+    # @return   Hash
+    #
+    #
+    def record_for(record, type = nil)
+      unless type
+        type = record.class.to_s.downcase
+      end
+      "data-#{type}-id=#{record.id}"
+    end
+
+    ##
+    #
     # Returns a hash containing the attribute name. This can be used as html options in rails helpers
     #
     # example in a form builder block:
