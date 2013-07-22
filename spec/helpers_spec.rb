@@ -78,11 +78,25 @@ describe "Rails helpers" do
   end
 
   describe '#action_for' do
-    subject { action_for('submit') }
 
-    it "returns a Hash with data-action-for => 'attribute' " do
-      expect(subject).to eq({ 'data-action-for' => 'submit' })
+    context "a submit action" do
+
+      subject { action_for('submit') }
+
+      it "returns a Hash with data-action-for => 'save' " do
+        expect(subject).to eq({ 'data-action-for' => 'save' })
+      end
     end
+
+    context "an other action" do
+
+      subject { action_for('other') }
+
+      it "returns a Hash with data-action-for => 'attribute' " do
+        expect(subject).to eq({ 'data-action-for' => 'other' })
+      end
+    end
+
 
   end
 

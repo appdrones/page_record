@@ -27,7 +27,7 @@ module PageRecord
     def read_attribute(attribute)
       element = send("#{attribute}?")
       tag = element.tag_name
-      textelement?(tag) ? element.value : element.text
+      input_field?(tag) ? element.value : element.text
     end
 
     ##
@@ -42,17 +42,20 @@ module PageRecord
     def write_attribute(attribute, value)
       element = send("#{attribute}?")
       tag = element.tag_name
-      raise NotInputField unless textelement?(tag)
-      element.set(value)
+      case tag
+      when 'textarea', 'input' then element.set(value)
+      when 'select'then element.select(value)
+      else raise NotInputField
+      end
       element
     end
 
     private
 
     # @private
-    def textelement?(tag)
+    def input_field?(tag)
       case tag
-      when 'textarea', 'input' then true
+      when 'textarea', 'input', 'select' then true
       else false
       end
     end

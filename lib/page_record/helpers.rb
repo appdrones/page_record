@@ -112,6 +112,8 @@ module PageRecord
     #
     #
     def action_for(name)
+      name = name.to_s
+      name = 'save' if name == 'submit'
       Hash['data-action-for', name]
     end
 

@@ -14,7 +14,7 @@ module Formtastic
 
         def input_html_options
           extend(PageRecord::Helpers)
-          input_html_options_org.merge(attribute_for(@method))
+          input_html_options_org.merge(attribute_for(input_name))
         end
       end
     end
