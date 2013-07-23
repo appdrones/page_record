@@ -39,8 +39,8 @@ module PageRecord
     # @raise 	[RecordNotFound]	if the page does not contain any of the specified records
     #
     def self.all(selector = nil, filter = nil)
-      selector ||= instance_variable_get('@selector')
-      filter ||= instance_variable_get('@filter')
+      selector ||= @selector
+      filter ||= @filter
       records = []
       context = context_for_selector(selector)
       context.all("[data-#{@type}-id]#{filter}").each do | record|
@@ -82,8 +82,8 @@ module PageRecord
     # @raise 	[RecordNotFound] if the page does not contain any of the specified records
     #
     def self.find(id = nil, selector = nil, filter = nil)
-      selector ||= instance_variable_get('@selector')
-      filter ||= instance_variable_get('@filter')
+      selector ||= @selector
+      filter ||= @filter
       new(id, selector, filter)
     end
 
@@ -116,8 +116,8 @@ module PageRecord
     # @raise 	[RecordNotFound] if the page does not contain any of the specified records
     #
     def self.find_by_attribute(attribute, value, selector, filter)
-      selector ||= instance_variable_get('@selector')
-      filter ||= instance_variable_get('@filter')
+      selector ||= @selector
+      filter ||= @filter
 
       context = context_for_selector(selector)
       record = context.find("[data-#{@type}-id]#{filter} > [data-attribute-for='#{attribute}']", text: value)

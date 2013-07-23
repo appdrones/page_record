@@ -15,8 +15,8 @@ module PageRecord
     private
 
     def find_record(selector, filter)
-      selector ||= instance_variable_get('@selector')
-      filter ||= instance_variable_get('@filter')
+      selector ||= @selector
+      filter ||= @filter
       id_text = @id.blank? ? '' : "='#{@id}'"
       begin
         context = self.class.context_for_selector(selector)

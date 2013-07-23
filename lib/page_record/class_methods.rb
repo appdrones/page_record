@@ -13,7 +13,10 @@ module PageRecord
     # ```
     # @param new_selector [String] The default selector to be used for all finders
     #
-    attr_writer :selector
+    def self.selector( new_selector = nil)
+      @selector = new_selector if new_selector
+      @selector
+    end
 
     ##
     # Set's the default filter for this class
@@ -29,7 +32,10 @@ module PageRecord
     #
     # @param new_filter [String] The default filter to be used for all finders
     #
-    attr_writer :filter
+    def self.filter( new_filter = nil)
+      @filter = new_filter if new_filter
+      @filter
+    end
 
     # @private
     def self.inherited(base)
