@@ -117,6 +117,33 @@ module PageRecord
       Hash['data-action-for', name]
     end
 
+
+    ##
+    #
+    # Returns a hash containing the error name. This can be used as html options in rails helpers
+    #
+    # example: 
+    # 
+    # TODO: Make an example
+    #
+    #
+    # this returns the follwing HTML:
+    #
+    # ```html
+    # <div data-error-for="name">can't be blank</div>
+    # ```
+    #
+    # @param name Symbol or String identifying the name
+    #
+    # @return   Hash
+    #
+    #
+    def error_for(name)
+      Hash['data-error-for', name]
+    end
+
+
+
     ##
     #
     # Writes a tag containing the specified PageRecord attribute

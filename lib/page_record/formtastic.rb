@@ -2,6 +2,18 @@ module Formtastic
 
   module Inputs
     module Base
+
+      module Errors
+        
+        def error_sentence_html
+          extend(PageRecord::Helpers)
+          error_class = options[:error_class] || builder.default_inline_error_class
+          options = { :class => error_class }.merge(error_for(@method))
+          template.content_tag(:p, Formtastic::Util.html_safe(errors.to_sentence.html_safe), options)
+        end
+      end
+
+
       module Html
 
         alias_method :input_html_options_org, :input_html_options
