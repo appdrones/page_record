@@ -33,3 +33,27 @@ shared_context "page one record" do
     visit "/page-one-record"
   end
 end
+
+shared_context "page without errors" do
+  before do
+    visit "/page-without-errors"
+  end
+end
+
+shared_context "page with 1 error" do
+  before do
+    visit "/page-with-1-error"
+  end
+end
+
+shared_context "page with 2 errors on same attribute" do
+  before do
+    visit "/page-with-2-errors-on-same-attribute"
+  end
+end
+
+shared_context "page with 2 errors on different attributes" do
+  before do
+    visit "/page-with-2-errors-on-different-attributes"
+  end
+end

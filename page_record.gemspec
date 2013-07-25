@@ -26,8 +26,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "actionpack"
   spec.add_development_dependency "activerecord"
   spec.add_development_dependency "guard-rspec"
-  # spec.add_development_dependency "debugger"
+  spec.add_development_dependency "ruby_gntp"
+  spec.add_development_dependency "debugger"
 
   spec.add_dependency "capybara" , '~>2.1.0'
   spec.add_dependency "activesupport"
+  spec.add_dependency "activemodel"
 end
