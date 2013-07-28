@@ -492,7 +492,7 @@ describe PageRecord::Base do
       subject { record.create }
 
       it "clicks on the specified action element" do
-        expect { subject }.not_to raise_error(PageRecord::NotInputField) # TODO: can we make it better?
+        expect { subject }.not_to raise_error
       end
 
     end

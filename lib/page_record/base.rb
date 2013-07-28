@@ -1,6 +1,7 @@
 module PageRecord
 
   class Base
+    include PageRecord::Inspector
 
     attr_reader :id
     alias_method :id?, :id
