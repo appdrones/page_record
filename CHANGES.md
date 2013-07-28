@@ -15,3 +15,8 @@
 ##V0.4.0
 * Added support for Formtasic
 * Added spec's for rails helpers
+
+##V0.5.0
+* Added a rails project containing some cucumber features to demonstrate how it works. The example also shows how to use the rails and Formtastic helpers.
+* Added support for form validations. Both in formtastic and in reading the errors
+* added a `inspect` for both the class and for the instances. This is __very__ helpfull when dubugging.

@@ -7,7 +7,33 @@ You've probably been there. You're building your killer Web Application. You, be
 ## PageRecord can help.
 There are a lot of ways you can do this. PageRecord is one of these ways. PageRecord is an ActiveRecord like abstraction for information on the HTML page. You can use `TeamRecord.find(1)` and `TeamRecord.find_by_name('Barcelona')` like functions to find a record on an HTML page. When you've found the record you need, you can use easy accessors to access the attributes. `TeamRecord.find(1).name` returns the name of the team.
 
-TODO explain how it helps in testing
+###Adding a record using a form
+
+With the PageRecord api you can fill all form fields press the save button.
+
+```ruby
+When(/^I add a team$/) do
+  visit new_team_path
+  team = TeamPage.find
+  team.name = "Ajax"
+  team.competition = @competition
+  team.save
+end
+```
+
+###Checking if an error is displayed.
+
+With the PageRecord api you can check for errors. No need to checkout what css you need to select the right DOM element. PageRecord takes care of that.
+
+```ruby
+Then(/^I should see error "can't be blank" on field "competition"$/) do
+  team = TeamPage.find
+  expect(team.errors['competition']).to eq ['can't be blank']
+end
+```
+
+###How to get the right HTML?
+PageRecord contains form builders that make it extremely easy to build the right forms. When  you use Formtastic. You don't have to do anything. PageRecord add's the right attributes to the right DOM elements. When you use barebone Rails, you van use the `record_form_for` form builder. See the example for more information.
 
 ##Documentation
 Look at [the yard documentation](http://rubydoc.info/github/appdrones/page_record/PageRecord) for details. Check [Changes](https://github.com/appdrones/page_record/blob/master/CHANGES.md) for (breaking) changes per version.
