@@ -57,3 +57,18 @@ shared_context "page with 2 errors on different attributes" do
     visit "/page-with-2-errors-on-different-attributes"
   end
 end
+
+
+shared_context "default context" do
+  include_context "page with single table with 3 records" # Default context
+
+  before do
+    class TeamPage < PageRecord::Base; end
+    PageRecord::Base.page page
+  end
+
+  after do
+    Object.send(:remove_const, :TeamPage)
+  end
+
+end

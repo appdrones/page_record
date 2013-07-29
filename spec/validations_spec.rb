@@ -1,11 +1,8 @@
 require_relative  './spec_helper'
 
-describe "Page Record validations" do
+describe PageRecord::Validations do
 
-  before do
-    class TeamPage < PageRecord::Base; end
-    PageRecord::Base.page page
-  end
+  include_context "default context"
 
   let(:record) { TeamPage.find}
 

@@ -7,16 +7,17 @@
 require 'coveralls'
 Coveralls.wear!
 
-if defined?(ActionView::Base)
-  require 'rails'
-  require 'rspec/rails/mocks'
-  include RSpec::Rails::Mocks
-end
+#
+#
+# These require's are only needed for Rails and Formtastic stuff
+require 'action_view'
+require 'rails'
+require 'rspec/rails/mocks'
+include RSpec::Rails::Mocks
 
 require 'page_record'
 require 'capybara'
 require 'capybara/dsl'
-include Capybara::DSL
 
 require_relative './support/test_app'
 require_relative './support/team'
@@ -30,6 +31,7 @@ RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
+  config.include Capybara::DSL
 
   # Run specs in random order to surface order dependencies. If you find an
   # order dependency and want to debug it, you can fix the order by providing

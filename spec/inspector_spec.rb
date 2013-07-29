@@ -13,9 +13,9 @@ describe PageRecord::Inspector do
 	    PageRecord::Base.page page
 	  end
 
-    after do
-      Object.send(:remove_const, :TeamPage)
-    end
+	    after do
+	      Object.send(:remove_const, :TeamPage)
+	    end
 
 
 		shared_context "page with all elements"

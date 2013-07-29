@@ -5,8 +5,9 @@ require 'page_record/attributes'
 require 'page_record/actions'
 require 'page_record/finders'
 require 'page_record/validations'
-require 'page_record/base'
 require 'page_record/errors'
+require 'page_record/base'
+
 if defined?(ActionView::Base)
   require 'page_record/helpers'
   require 'page_record/form_builder'

@@ -1,7 +1,9 @@
-require 'action_view'
 require_relative  './spec_helper'
 
 describe "Rails helpers" do
+
+  include_context "default context"
+
 
   before(:each) do
     extend PageRecord::Helpers
