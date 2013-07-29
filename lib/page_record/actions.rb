@@ -32,6 +32,8 @@ module PageRecord
         else
           action_for(action)
         end
+      rescue Capybara::Ambiguous
+        raise MultipleRecords, "Found multiple #{action} tags for #{@type} on page"
       rescue Capybara::ElementNotFound
         super
       end

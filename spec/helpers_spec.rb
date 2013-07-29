@@ -15,6 +15,40 @@ describe "Rails helpers" do
     class Car; end
   end
 
+  describe '#record_for' do
+
+    before do
+      @car = stub_model(Car, id: 10)
+    end
+
+    context 'no type given' do
+      subject { record_for(@car) }
+      it "returns a string with the given record id and infered type" do
+        expect( subject ).to eq 'data-car-id=10'
+      end
+
+    end
+
+    context 'type given' do
+
+      subject { record_for(@car, :bus) }
+
+      it "returns a string with the given record id and given type" do
+        expect(subject).to eq 'data-bus-id=10'
+      end
+    end
+  end
+
+
+  describe '#error_for' do
+
+    subject { error_for(:name) }
+    
+    it "returns a Hash containing the error_for text and the attribute" do
+      expect( subject['data-error-for'] ).to eq :name
+    end
+  end
+
   describe '#form_record_for' do
 
     context "without a variable argument" do

@@ -115,10 +115,12 @@ end
 
 shared_examples "a valid action finder" do
   #
-  # Use the parameters
+  # Use the parameters:
   # valid_action
   # invalid_action
+  # multiple_action
   #
+
   context "action exists on page" do
     subject { valid_action }
     it "clicks on the specified action element" do
@@ -134,4 +136,14 @@ shared_examples "a valid action finder" do
       expect { subject }.to raise_error(NoMethodError)
     end
   end
+
+  context "multiple actions exist on page" do
+    subject { multiple_actions }
+
+    it "raises error PageRecord::MultipleRecords" do
+      expect { subject }.to raise_error(PageRecord::MultipleRecords)
+    end
+  end
+
+
 end
