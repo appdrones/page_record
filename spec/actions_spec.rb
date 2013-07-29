@@ -15,7 +15,6 @@ describe PageRecord::Actions do
           and_return('OK')
     end
 
-
     it_behaves_like "a valid action finder" do
       let(:valid_action) { record.create}
       let(:invalid_action) { record.unkown_action }
@@ -43,7 +42,6 @@ describe PageRecord::Actions do
           stub(:click). # TODO: Find out why should_receive doesn't work
           and_return('OK')
     end
-
 
     it_behaves_like "a valid action finder" do
       let(:valid_action) { TeamPage.page_action}
