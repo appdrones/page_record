@@ -1,5 +1,5 @@
 module PageRecord
-  class Base
+  module Attributes
     ##
     # Searches the record for the specified attribute and returns
     # the {http://rubydoc.info/github/jnicklas/capybara/master/Capybara/Result Capybara Result}.

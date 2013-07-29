@@ -1,7 +1,7 @@
 require 'active_model'
 
 module PageRecord
-  class Base
+  module Validations
     ##
     # Searches the record for any errors and returns them
     #
