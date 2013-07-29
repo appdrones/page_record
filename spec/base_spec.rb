@@ -204,10 +204,6 @@ describe PageRecord::Base do
       end
     end
 
-    #
-    # Checks a bug
-    it "leaves attribute_names of host class intact"
-
   end
 
   describe "found bugs" do

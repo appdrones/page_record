@@ -60,7 +60,6 @@ end
 
 
 shared_context "default context" do
-  include_context "page with single table with 3 records" # Default context
 
   before do
     class TeamPage < PageRecord::Base; end

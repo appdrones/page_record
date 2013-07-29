@@ -129,7 +129,7 @@ module PageRecord
         record = context.find("[data-#{@type}-id]#{filter} > [data-attribute-for='#{attribute}']", text: value)
         parent = record.find(:xpath, '..')
         id = parent["data-#{@type}-id"]
-        new(id, selector)
+        new(id, selector, filter)
         rescue Capybara::Ambiguous
           raise MultipleRecords, "Found multiple #{@type} record with #{attribute} #{value} on page"
         rescue Capybara::ElementNotFound

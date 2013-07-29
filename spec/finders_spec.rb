@@ -6,6 +6,7 @@ describe PageRecord::Finders do
 
   describe ".all" do
 
+    include_context "page with single table with 3 records"
     subject { TeamPage.all(selector, filter) }
 
     context "one set of records available on the page" do
@@ -31,8 +32,8 @@ describe PageRecord::Finders do
       let(:selector) { "" }
       let(:filter) { "" }
 
-      it "returns an empty Array" do
-        expect(subject).to eq []
+      it "is empty" do
+        expect(subject).to be_empty
       end
 
     end
@@ -62,139 +63,84 @@ describe PageRecord::Finders do
       end
 
     end
-
   end
 
+ describe ".find" do
 
+    context "no selector no filter" do
 
-  describe ".find" do
-
-    subject { TeamPage.find(record_number, selector, filter) }
-    let(:selector) { "" }
-    let(:filter) { "" }
-
-    context "find without an id" do
-      pending
-    end
-
-    context "one found on the page" do
-
-      let(:record_number) { 1 }
-
-      it_behaves_like "a valid call of .find"
-
-      it_behaves_like "it handles filters"
-
-    end
-
-    context "multiple record found on the page" do
-
-      let(:record_number) { 1 }
-      include_context "page with duplicate records"
-
-      subject { TeamPage.find(1) }
-
-      it "raises error PageRecord::MultipleRecords" do
-        expect { subject }.to raise_error(PageRecord::MultipleRecords)
-      end
-
-    end
-
-    context "no record on the page" do
-
-      let(:record_number) { 37373 }
-
-      it "raises error PageRecord::RecordNotFound" do
-        expect { subject }.to raise_error(PageRecord::RecordNotFound)
-      end
-
-    end
-
-    context "multiple sets of records available on the page" do
-      include_context "page with two tables with 3 records"
-      let(:record_number) { 1 }
-
-      context "without selector" do
-        let(:selector) { "" }
-
-        it "raises error PageRecord::MultipleRecords" do
-          expect { subject }.to raise_error(PageRecord::MultipleRecords)
+      context "id given" do
+        subject { TeamPage.find(1) }
+        it_behaves_like "a valid single record finder" do
+          let(:no_records_url)        { '/page-without-records' }
+          let(:single_record_url)     { '/page-one-record' }
+          let(:multiple_records_url)  { '/page-with-duplicate-records' }
         end
-
       end
 
-      it_behaves_like "handles invalid selectors"
-
-      context "with a correct selector" do
-
-        let(:selector) { "#first-table" }
-        it_behaves_like "a valid call of .find"
-
-      end
-
-    end
-
-  end
-
-  describe "find_by..." do
-
-    subject { TeamPage.find_by_name(name, selector, filter) }
-    let(:selector) { "" }
-    let(:filter) { "" }
-
-    context "no record on page" do
-      let(:name) { "unknown name" }
-
-      it "raises error PageRecord::RecordNotFound" do
-        expect { subject }.to raise_error(PageRecord::RecordNotFound)
-      end
-
-    end
-
-    context "multiple records on page" do
-      let(:name) { "Ajax" }
-      include_context "page with duplicate records"
-
-      it "raises error PageRecord::MultipleRecords" do
-        expect { subject }.to raise_error(PageRecord::MultipleRecords)
-      end
-
-    end
-
-    context "one record on page" do
-      let(:name) { "Ajax" }
-
-      it_behaves_like "a valid call of .find"
-      it_behaves_like "it handles filters"
-
-    end
-
-    context "multiple sets of records avialable on the page" do
-      include_context "page with two tables with 3 records"
-      let(:name) { "Ajax" }
-
-      context "without selector" do
-        let(:selector) { "" }
-
-        it "raises error PageRecord::MultipleRecords" do
-          expect { subject }.to raise_error(PageRecord::MultipleRecords)
+      context "no id given" do
+        subject { TeamPage.find }
+        it_behaves_like "a valid single record finder" do
+          let(:no_records_url)        { '/page-without-records' }
+          let(:single_record_url)     { '/page-one-record' }
+          let(:multiple_records_url)  { '/page-with-duplicate-records' }
         end
-
       end
-
-      it_behaves_like "handles invalid selectors"
-
-      context "with a correct selector" do
-
-        let(:selector) { "#first-table" }
-        let(:name) { "Ajax" }
-        it_behaves_like "a valid call of .find"
-
-      end
-
     end
 
+    context "with selector" do
+      subject { TeamPage.find(1, '.the-selector', '') }
+      it_behaves_like "a valid single record finder" do
+        let(:no_records_url)        { '/page-without-records-with-selector' }
+        let(:single_record_url)     { '/page-one-record-with-selector' }
+        let(:multiple_records_url)  { '/page-with-duplicate-records-with-selector' }
+      end
+    end
+
+    context "with filter" do
+      subject { TeamPage.find(1, '', '.the-filter') }
+      it_behaves_like "a valid single record finder" do
+        let(:no_records_url)        { '/page-without-records-with-filter' }
+        let(:single_record_url)     { '/page-one-record-with-filter' }
+        let(:multiple_records_url)  { '/page-with-duplicate-records-with-filter' }
+      end
+    end
   end
+
+  describe ".find_by_...." do
+
+    context "no selector no filter" do
+
+      context "id given" do
+        subject { TeamPage.find_by_name('Ajax') }
+        it_behaves_like "a valid single record finder" do
+          let(:no_records_url)        { '/page-without-records' }
+          let(:single_record_url)     { '/page-one-record' }
+          let(:multiple_records_url)  { '/page-with-duplicate-records' }
+        end
+      end
+    end
+
+    context "with selector" do
+      subject { TeamPage.find_by_name('Ajax', '.the-selector', '') }
+      it_behaves_like "a valid single record finder" do
+        let(:no_records_url)        { '/page-without-records-with-selector' }
+        let(:single_record_url)     { '/page-one-record-with-selector' }
+        let(:multiple_records_url)  { '/page-with-duplicate-records-with-selector' }
+      end
+    end
+
+    context "with filter" do
+      subject { TeamPage.find_by_name('Ajax', '', '.the-filter') }
+      it_behaves_like "a valid single record finder" do
+        let(:no_records_url)        { '/page-without-records-with-filter' }
+        let(:single_record_url)     { '/page-one-record-with-filter' }
+        let(:multiple_records_url)  { '/page-with-duplicate-records-with-filter' }
+      end
+    end
+  end
+
+
 
 end
 
