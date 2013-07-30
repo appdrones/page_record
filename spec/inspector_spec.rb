@@ -2,6 +2,7 @@ require_relative  './spec_helper'
 
 describe PageRecord::Inspector do
 
+  include_context "page with single table with 3 records"
 
 	describe '.inspect' do
 	  before do
@@ -17,8 +18,6 @@ describe PageRecord::Inspector do
 	      Object.send(:remove_const, :TeamPage)
 	    end
 
-
-		shared_context "page with all elements"
 
 		it "returns the type" do
 			expect(TeamPage.inspect[:type]).to eq 'team'
@@ -40,6 +39,10 @@ describe PageRecord::Inspector do
 			expect(TeamPage.inspect[:attributes]).to eq %w(a b c d e)
 		end
 
+		it "returns all actions" do
+			expect(TeamPage.inspect[:actions]).to include 'edit', 'next'
+		end 
+
 
 	end
 
@@ -54,16 +57,19 @@ describe PageRecord::Inspector do
       Object.send(:remove_const, :TeamPage)
     end
 
-	  include_context "page with single table with 3 records"
 
 	  subject { TeamPage.find(1).inspect }
 
 	  it 'returns all attributes' do
-	  	expect(subject['ranking']).to eq '1'
-	  	expect(subject['name']).to eq 'Ajax'
-	  	expect(subject['points']).to eq '10'
-	  	expect(subject['goals']).to eq '--not found on page--'
+	  	expect(subject[:attributes]['ranking']).to eq '1'
+	  	expect(subject[:attributes]['name']).to eq 'Ajax'
+	  	expect(subject[:attributes]['points']).to eq '10'
+	  	expect(subject[:attributes]['goals']).to eq '--not found on page--'
 	  end
+
+		it "returns all actions" do
+			expect(subject[:actions]).to include 'edit'
+		end 
 
 	end
 end

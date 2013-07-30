@@ -8,17 +8,25 @@ module PageRecord
     end
 
     def inspect
-    	attributes = Hash.new
-    	self.class.attributes.each do | attribute|
-    		begin
-	    		attributes[attribute] = self.send(attribute)
-    		rescue AttributeNotFound
-    			attributes[attribute] = '--not found on page--'
-    		end
-    	end
-    	attributes
+      {
+        attributes: attributes,
+        actions: actions
+      }
     end
 
+    private
+    #@private
+    def attributes
+      attributes = Hash.new
+      self.class.attributes.each do | attribute|
+        begin
+          attributes[attribute] = self.send(attribute)
+        rescue AttributeNotFound
+          attributes[attribute] = '--not found on page--'
+        end
+      end
+      attributes
+    end
 
     module ClassMethods
       def inspect
@@ -28,6 +36,7 @@ module PageRecord
       		selector: 		self.selector,
       		filter: 			self.filter,
       		attributes: 	self.attributes,
+          actions:      self.actions
       	}
       end
     end
