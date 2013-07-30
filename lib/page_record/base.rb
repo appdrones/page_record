@@ -280,6 +280,7 @@ module PageRecord
         raise MultipleRecords, "Found multiple #{@type} record with id #{@id} on page"
       rescue Capybara::ElementNotFound
         raise RecordNotFound, "#{@type} record with id #{@id} not found on page"
+        '' # TODO: Don't know why, but ruby 2.0 needs this
       end
     end
 
