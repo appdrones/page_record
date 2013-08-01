@@ -40,9 +40,10 @@ module PageRecord
     end
 
     protected
+
     # @private
     def actions
-      self.class.send('actions_on?',@record)
+      self.class.send('actions_on?', @record)
     end
 
     private
@@ -97,6 +98,7 @@ module PageRecord
       end
 
       protected
+
       # @private
       def actions
         actions_on?(page)
@@ -104,16 +106,17 @@ module PageRecord
 
       # @private
       def actions_on?(context)
-        actions = context.all("[data-action-for]")
-        action_hash = Hash.new
+        actions = context.all('[data-action-for]')
+        action_hash = {}
         actions.each do | action|
           name = action['data-action-for']
-          action_hash[name] = { tag: action.tag_name, text:action.text }
+          action_hash[name] = { tag: action.tag_name, text: action.text }
         end
         action_hash
       end
 
       private
+
       # @private
       def action_for(action)
         element = action_for?(action)

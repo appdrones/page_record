@@ -17,7 +17,6 @@ module PageRecord
       find_record(selector, filter)
     end
 
-
     ##
     # Set's the default selector for this class
     #
@@ -30,7 +29,7 @@ module PageRecord
     # ```
     # @param new_selector [String] The default selector to be used for all finders
     #
-    def self.selector( new_selector = nil)
+    def self.selector(new_selector = nil)
       @selector = new_selector if new_selector
       @selector
     end
@@ -49,7 +48,7 @@ module PageRecord
     #
     # @param new_filter [String] The default filter to be used for all finders
     #
-    def self.filter( new_filter = nil)
+    def self.filter(new_filter = nil)
       @filter = new_filter if new_filter
       @filter
     end
@@ -280,7 +279,6 @@ module PageRecord
         raise MultipleRecords, "Found multiple #{@type} record with id #{@id} on page"
       rescue Capybara::ElementNotFound
         raise RecordNotFound, "#{@type} record with id #{@id} not found on page"
-        '' # TODO: Don't know why, but ruby 2.0 needs this
       end
     end
 

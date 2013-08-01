@@ -3,9 +3,9 @@
 
 guard 'rspec' do
   watch(%r{^spec/.+_spec\.rb$})
-  watch(%r{^lib/(.+)\.rb$})           { |m| "spec/lib/page_record/#{m[1]}_spec.rb" }
-  watch('spec/spec_helper.rb')        { "spec" }
-  watch('spec/support/*.rb')          { "spec" }
-  watch('spec/support/views/*.erb')   { "spec" }
+  watch(%r{^lib/page_record/(.+)\.rb$})  { |m| "spec/#{m[1]}_spec.rb" }
+  watch('spec/spec_helper.rb')       		 { "spec" }
+  watch('spec/support/*.rb')          	 { "spec" }
+  watch('spec/support/views/*.erb')   	 { "spec" }
 end
 

@@ -23,7 +23,7 @@ module PageRecord
     # @param type Symbol identifying the type of record and the variable to use
     # @param var the variable to use. This is optional
     #
-    # @return	Hash
+    # @return   Hash
     #
     #
     def form_record_for(type, var = nil)
@@ -83,7 +83,7 @@ module PageRecord
     #
     # @param name Symbol or String identifying the name
     #
-    # @return	Hash
+    # @return   Hash
     #
     #
     def attribute_for(name)
@@ -108,7 +108,7 @@ module PageRecord
     #
     # @param name Symbol or String identifying the action name
     #
-    # @return	Hash
+    # @return   Hash
     #
     #
     def action_for(name)
@@ -117,13 +117,12 @@ module PageRecord
       Hash['data-action-for', name]
     end
 
-
     ##
     #
     # Returns a hash containing the error name. This can be used as html options in rails helpers
     #
-    # example: 
-    # 
+    # example:
+    #
     # TODO: Make an example
     #
     #
@@ -141,8 +140,6 @@ module PageRecord
     def error_for(name)
       Hash['data-error-for', name]
     end
-
-
 
     ##
     #
@@ -211,7 +208,7 @@ module PageRecord
     # ```
     # @see
     #
-    # @return	formBuilder object
+    # @return   formBuilder object
     #
     #
     def record_form_for(record, options = {}, &block)

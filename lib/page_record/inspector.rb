@@ -2,7 +2,6 @@ module PageRecord
 
   module Inspector
 
-
     def self.included(base)
       base.extend(ClassMethods)
     end
@@ -15,12 +14,13 @@ module PageRecord
     end
 
     private
-    #@private
+
+    # @private
     def attributes
-      attributes = Hash.new
+      attributes = {}
       self.class.attributes.each do | attribute|
         begin
-          attributes[attribute] = self.send(attribute)
+          attributes[attribute] = send(attribute)
         rescue AttributeNotFound
           attributes[attribute] = '--not found on page--'
         end
@@ -30,16 +30,15 @@ module PageRecord
 
     module ClassMethods
       def inspect
-      	{
-      		type: 				self.type,
-      		host_class: 	self.host_class,
-      		selector: 		self.selector,
-      		filter: 			self.filter,
-      		attributes: 	self.attributes,
-          actions:      self.actions
-      	}
+        {
+          type:         type,
+          host_class:   host_class,
+          selector:     selector,
+          filter:       filter,
+          attributes:   attributes,
+          actions:      actions
+        }
       end
     end
-
   end
 end

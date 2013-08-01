@@ -3,11 +3,12 @@ require_relative  './spec_helper'
 describe PageRecord::Actions do
 
   include_context "default context"
+  include_context "page one record in a form"
+
 
   describe "#<action>" do
 
     let(:record) { TeamPage.find(1) }
-    include_context "page one record in a form"
 
     before do
       Capybara::Node::Element.any_instance.
@@ -25,7 +26,6 @@ describe PageRecord::Actions do
   describe "#<action>?" do
 
     let(:record) { TeamPage.find(1) }
-    include_context "page one record in a form"
 
     it_behaves_like "a valid action finder" do
       let(:valid_action) { record.create?}
@@ -35,7 +35,6 @@ describe PageRecord::Actions do
   end
 
   describe ".<action>" do
-    include_context "page one record in a form"
 
     before do
       Capybara::Node::Element.any_instance.
@@ -51,7 +50,6 @@ describe PageRecord::Actions do
   end
 
   describe ".<action>?" do
-    include_context "page one record in a form"
 
     it_behaves_like "a valid action finder" do
       let(:valid_action) { TeamPage.page_action?}

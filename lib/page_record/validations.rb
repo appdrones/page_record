@@ -10,7 +10,7 @@ module PageRecord
     # @raise [AttributeNotFound] when the attribute is not found in the record
     #
     def errors
-      found_errors = @record.all("[data-error-for]")
+      found_errors = @record.all('[data-error-for]')
       error_list = ActiveModel::Errors.new(self)
       found_errors.each do | error |
         attribute = error['data-error-for']

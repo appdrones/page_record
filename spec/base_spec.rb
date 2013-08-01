@@ -3,6 +3,7 @@ require_relative  './spec_helper'
 describe PageRecord::Base do
 
   include_context "default context"
+  include_context "page one record in a form"
 
   describe ".type" do
 
