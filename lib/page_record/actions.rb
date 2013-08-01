@@ -25,18 +25,7 @@ module PageRecord
     #   this name on the page
     #
     def method_missing(action)
-      raw_action = /(.*)\?/.match(action)
-      begin
-        if raw_action
-          action_for?(raw_action[1])
-        else
-          action_for(action)
-        end
-      rescue Capybara::Ambiguous
-        raise MultipleRecords, "Found multiple #{action} tags for #{@type} on page"
-      rescue Capybara::ElementNotFound
-        super
-      end
+      self.class.method_missing(action)
     end
 
     protected
