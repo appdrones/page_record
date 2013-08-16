@@ -20,3 +20,9 @@
 * Added a rails project containing some cucumber features to demonstrate how it works. The example also shows how to use the rails and Formtastic helpers.
 * Added support for form validations. Both in formtastic and in reading the errors
 * added a `inspect` for both the class and for the instances. This is __very__ helpfull when dubugging.
+
+##V1.0.0
+Released to production
+
+##V1.0.1
+Added a better error message on a failed record action. Include the record id

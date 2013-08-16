@@ -25,7 +25,8 @@ module PageRecord
     #   this name on the page
     #
     def method_missing(action)
-      self.class.method_missing(action)
+      message = "Found multiple #{action} tags for #{@type} with id #{id} on page"
+      self.class.method_missing(action, message)
     end
 
     protected
@@ -71,7 +72,7 @@ module PageRecord
       # @raise [PageRecord::MultipleRecords] when there are more actions with
       #   this name on the page
       #
-      def method_missing(action)
+      def method_missing(action, message = nil)
         raw_action = /(.*)\?/.match(action)
         begin
           if raw_action
@@ -80,7 +81,8 @@ module PageRecord
             action_for(action)
           end
         rescue Capybara::Ambiguous
-          raise MultipleRecords, "Found multiple #{action} tags for #{@type} on page"
+          message ||= "Found multiple #{action} tags for #{@type} on page"
+          raise MultipleRecords, message
         rescue Capybara::ElementNotFound
           super
         end
