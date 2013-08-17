@@ -18,7 +18,7 @@ describe PageRecord::Actions do
 
     it_behaves_like "a valid action finder" do
       let(:valid_action) { record.create}
-      let(:invalid_action) { record.unkown_action }
+      let(:invalid_action) { record.page_action } # It should not see the page action
       let(:multiple_actions) { record.multiple_action }
     end
   end
@@ -29,7 +29,7 @@ describe PageRecord::Actions do
 
     it_behaves_like "a valid action finder" do
       let(:valid_action) { record.create?}
-      let(:invalid_action) { record.unkown_action?}
+      let(:invalid_action) { record.page_action?} # It should not see the page action
       let(:multiple_actions) { record.multiple_action? }
     end
   end

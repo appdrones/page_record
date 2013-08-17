@@ -2,59 +2,31 @@ module PageRecord
   module Actions
 
     def self.included(base)
+      base.class_eval do
+        include(ActionHandler)
+      end
+      base.extend(ActionHandler)
       base.extend(ClassMethods)
-    end
-
-    ##
-    # This is the implementation of the record action routine. It has two variants.
-    # it has a `?` variant and a `normal` variant.
-    #
-    # normal variant:
-    # It checks the page for a data-action-for='action' tag somewhere on the page.
-    # If it finds it, it clicks it.
-    #
-    # `?` variant:
-    # It checks the page for a data-action-for='action' tag somewhere on the page.
-    # If it finds it, returns the Capybara element.
-    #
-    # @param action [Symbol] this is the name of the action
-    #
-    # @return [Capybara::Result]
-    #
-    # @raise [PageRecord::MultipleRecords] when there are more actions with
-    #   this name on the page
-    #
-    def method_missing(action)
-      message = "Found multiple #{action} tags for #{@type} with id #{id} on page"
-      self.class.method_missing(action, message)
     end
 
     protected
 
     # @private
     def actions
-      self.class.send('actions_on?', @record)
+      actions_on?(@record)
     end
 
     private
-
-    # @private
-    def action_for(action)
-      element = action_for?(action)
-      element.click
-      element
-    end
 
     # @private
     def action_for?(action)
       @record.find("[data-action-for='#{action}']")
     end
 
-    module ClassMethods
-
+    module ActionHandler
       ##
       #
-      # This is the implementation of the page action routine. It has two variants.
+      # This is the implementation of the page and record action routine. It has two variants.
       # it has a `?` variant and a `normal` variant.
       #
       # normal variant:
@@ -70,7 +42,7 @@ module PageRecord
       # @return [Capybara::Element]
       #
       # @raise [PageRecord::MultipleRecords] when there are more actions with
-      #   this name on the page
+      #   this name on the page/record
       #
       def method_missing(action, message = nil)
         raw_action = /(.*)\?/.match(action)
@@ -88,11 +60,13 @@ module PageRecord
         end
       end
 
-      protected
+      private
 
       # @private
-      def actions
-        actions_on?(page)
+      def action_for(action)
+        element = action_for?(action)
+        element.click
+        element
       end
 
       # @private
@@ -106,14 +80,18 @@ module PageRecord
         action_hash
       end
 
-      private
+    end
+
+    module ClassMethods
+
+      protected
 
       # @private
-      def action_for(action)
-        element = action_for?(action)
-        element.click
-        element
+      def actions
+        actions_on?(page)
       end
+
+      private
 
       # @private
       def action_for?(action)

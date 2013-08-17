@@ -25,4 +25,4 @@
 Released to production
 
 ##V1.0.1
-Added a better error message on a failed record action. Include the record id
+Fixed a bug in action handling that causes page actions aoutside of a record te be noticed. Refactored the action handling.
