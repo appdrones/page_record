@@ -25,7 +25,8 @@ module PageRecord
           attributes[attribute] = '--not found on page--'
         end
       end
-      attributes
+     attributes['id'] = id
+     attributes
     end
 
     module ClassMethods
