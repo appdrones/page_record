@@ -25,4 +25,8 @@
 Released to production
 
 ##V1.0.1
-Fixed a bug in action handling that causes page actions aoutside of a record te be noticed. Refactored the action handling.
+* Fixed a bug in action handling that causes page actions aoutside of a record te be noticed. Refactored the action handling.
+
+##V1.0.2
+* Added the id of the record to the inspector.
+* inspecting uses the Array variant of Capybara and doesn't wait. 

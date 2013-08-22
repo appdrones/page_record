@@ -25,7 +25,11 @@ module PageRecord
     # @raise [AttributeNotFound] when the attribute is not found in the record
     #
     def read_attribute(attribute)
-      element = send("#{attribute}?")
+      if block_given?
+        element = yield
+      else
+        element = send("#{attribute}?")
+      end
       tag = element.tag_name
       input_field?(tag) ? element.value : element.text
     end

@@ -20,8 +20,10 @@ module PageRecord
       attributes = {}
       self.class.attributes.each do | attribute|
         begin
-          attributes[attribute] = send(attribute)
-        rescue AttributeNotFound
+          attributes[attribute] = read_attribute(attribute) do
+            @record.all("[data-attribute-for='#{attribute}']").first
+          end
+        rescue NoMethodError
           attributes[attribute] = '--not found on page--'
         end
       end
