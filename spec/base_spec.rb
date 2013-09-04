@@ -207,6 +207,23 @@ describe PageRecord::Base do
 
   end
 
+  describe "record.element?" do
+
+    subject { TeamPage.find().element? }
+
+    context "record on the page" do
+      before do
+        visit '/page-one-record'
+      end
+
+      it "returns the capybara element containing the record" do
+        expect(subject.class).to eq Capybara::Node::Element
+      end
+
+    end
+  end
+
+
   describe "found bugs" do
 
     describe "class name contains word page but doens't exist" do

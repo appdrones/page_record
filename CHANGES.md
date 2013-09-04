@@ -30,3 +30,6 @@ Released to production
 ##V1.0.2
 * Added the id of the record to the inspector.
 * inspecting uses the Array variant of Capybara and doesn't wait. 
+
+##V1.0.3
+* Added support for getting the Capybara element of a record.ait. 

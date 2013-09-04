@@ -18,6 +18,21 @@ module PageRecord
     end
 
     ##
+    # Return the Capybara element containg the record
+    #
+    # Example:
+    #
+    # ```ruby
+    #   team_1 = TeamPage.find(1) # Get the first team
+    #   team_1.element? # access the Capybara context
+    # end
+    # ```
+    #
+    def element?
+      @record
+    end
+
+    ##
     # Set's the default selector for this class
     #
     # Example:
