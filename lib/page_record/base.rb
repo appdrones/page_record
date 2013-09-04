@@ -13,7 +13,7 @@ module PageRecord
     def initialize(id = nil, selector = nil, filter = nil)
       @page = self.class.page
       @type = self.class.instance_variable_get('@type')
-      @id = id.to_s
+      @id = id.to_i if id 
       find_record(selector, filter)
     end
 
@@ -289,7 +289,7 @@ module PageRecord
       begin
         context = self.class.context_for_selector(selector)
         @record = context.find("[data-#{@type}-id#{id_text}]#{filter}")
-        @id = @record["data-#{@type}-id"] if @id.blank?
+        @id = @record["data-#{@type}-id"].to_i if @id.blank?
       rescue Capybara::Ambiguous
         raise MultipleRecords, "Found multiple #{@type} record with id #{@id} on page"
       rescue Capybara::ElementNotFound

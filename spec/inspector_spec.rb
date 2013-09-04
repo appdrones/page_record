@@ -61,7 +61,7 @@ describe PageRecord::Inspector do
 	  subject { TeamPage.find(1).inspect }
 
 	  it 'returns all attributes' do
-	  	expect(subject[:attributes]['id']).to eq '1'
+	  	expect(subject[:attributes]['id']).to eq 1
 	  	expect(subject[:attributes]['ranking']).to eq '1'
 	  	expect(subject[:attributes]['name']).to eq 'Ajax'
 	  	expect(subject[:attributes]['points']).to eq '10'

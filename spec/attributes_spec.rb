@@ -4,6 +4,16 @@ describe PageRecord::Attributes do
 
   include_context "default context"
 
+  describe "#id" do
+
+    subject { TeamPage.find(1) }
+    include_context "page with single table with 3 records"
+
+    it "returns the id as an integer" do
+      expect(subject.id).to eq 1
+    end
+  end
+
   describe "#... valid attribute getter" do
 
     subject { TeamPage.find(1) }

@@ -26,7 +26,7 @@ shared_examples "a valid single record finder" do
     end
 
     it "returns the record identified by the id" do
-      expect(subject.id).to eq '1'
+      expect(subject.id).to eq 1
     end
 
   end
