@@ -1,5 +1,8 @@
 #Changes
 
+##V1.0.4
+* Changed behaviour of selector. A selector and a data-record-id on the same HTML element are no longer allowed
+
 ##V1.0.3
 * Added support for getting the Capybara element of a record.
 * #id now returns an integer 

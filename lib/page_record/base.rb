@@ -271,7 +271,7 @@ module PageRecord
         page
       else
         begin
-          page.find(selector).find(:xpath, '..')
+          page.find(selector)
         rescue Capybara::Ambiguous
           raise MultipleRecords, "Found multiple HTML segments with selector #{selector} on page"
         rescue Capybara::ElementNotFound
