@@ -11,8 +11,8 @@ describe PageRecord::Actions do
     let(:record) { TeamPage.find(1) }
 
     before do
-      Capybara::Node::Element.any_instance.
-          stub(:click). # TODO: Find out why should_receive doesn't work
+      allow_any_instance_of(Capybara::Node::Element).
+          to receive(:click). # TODO: Find out why should_receive doesn't work
           and_return('OK')
     end
 
@@ -37,8 +37,8 @@ describe PageRecord::Actions do
   describe ".<action>" do
 
     before do
-      Capybara::Node::Element.any_instance.
-          stub(:click). # TODO: Find out why should_receive doesn't work
+      allow_any_instance_of(Capybara::Node::Element).
+          to receive(:click). # TODO: Find out why should_receive doesn't work
           and_return('OK')
     end
 
